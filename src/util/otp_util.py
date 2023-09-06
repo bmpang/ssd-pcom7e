@@ -1,6 +1,7 @@
 from random import randint
 from smtplib import SMTP
 
+
 def generate_otp():
     otp = str(randint(0, 9))
 
@@ -9,9 +10,12 @@ def generate_otp():
 
     return otp
 
-#This function sends an email containing a temporary OTP to the user's registed account 
+
+# This function sends an email containing a temporary OTP to the user's registed account
 def send_email(email, subject, message):
     print(message)
+
+
 #   # Create a SMTP connection.
 #   connection = SMTP('smtp.gmail.com', 587)
 #   connection.ehlo()
@@ -26,11 +30,12 @@ def send_email(email, subject, message):
 #   # Close the connection.
 #   connection.close()
 
+
 def send_otp_to_email(email):
-  otp = generate_otp()
+    otp = generate_otp()
 
-  # Send the OTP to the email address.
-  send_email(email, "OTP Password", "Your OTP is: {0}".format(otp))
+    # Send the OTP to the email address.
+    send_email(email, "OTP Password", "Your OTP is: {0}".format(otp))
 
-  # Return the OTP.
-  return otp
+    # Return the OTP.
+    return otp

@@ -1,20 +1,18 @@
-COPYRIGHTABLE_MATERIAL_TYPES = [
-    "SONG",
-    "LYRICS",
-    "SCORE"
-]
+COPYRIGHTABLE_MATERIAL_TYPES = ["SONG", "LYRICS", "SCORE"]
+
 
 class InvalidCopyrightableMaterialTypeException(Exception):
     pass
 
+
 class CopyrightableMaterial:
-    self.artist_id
-    self.title
-    self.data
-    self.type
-    '
+    artist_id: int
+    title: str
+    data = None
+    type = None
+
     def __init__(self, file_path, type):
-        _file = open(file_path, 'rb')
+        _file = open(file_path, "rb")
         self.data = _file
         _file.close()
 

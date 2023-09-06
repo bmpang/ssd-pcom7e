@@ -5,5 +5,3 @@ if __name__ == "__main__":
     session = Session()
 
     initiate_session(session)
-
-    
