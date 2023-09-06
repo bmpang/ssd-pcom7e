@@ -1,12 +1,12 @@
-from random import randint
+from secrets import randbelow
 from smtplib import SMTP
 
 
 def generate_otp():
-    otp = str(randint(0, 9))
+    otp = str(randbelow(10))
 
     for i in range(5):
-        otp += str(randint(0, 9))
+        otp += str(randbelow(10))
 
     return otp
 
