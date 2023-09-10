@@ -45,20 +45,35 @@ def initiate_session(session, failures=0):
 
 
 def create_artist():
-    # Todo
+    # Todo: Brandon
     return
 
 
 def modify_artist():
-    # Todo
+    # Todo: Brandon
     return
 
 
 def create_artifact():
-    # Todo: write
+    # Todo: Brandon
+    return
+
+
+def get_artifact():
+    # Todo
     return
 
 
 def modify_artifact():
-    # Todo
+    # Todo: Brandon
+    return
+
+
+def unlock_user():
+    # Todo: Lucas
+    return
+
+
+def register():
+    # Todo: Lucas
     return
