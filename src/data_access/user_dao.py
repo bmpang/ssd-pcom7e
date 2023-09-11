@@ -6,8 +6,6 @@ cursor = connection.cursor()
 obj = Artist(3)
 print(obj.getVal())
 
-#how to represent a one to N relationship between two classes?
-
 #Enter a new user into the databse 
 #def addUser(self):
     cursor.execute("""
