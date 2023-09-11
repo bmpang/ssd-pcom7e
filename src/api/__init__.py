@@ -3,7 +3,6 @@ from getpass import getpass
 from util.encryption_util import hash_data
 from util.otp_util import send_otp_to_email
 
-
 def initiate_session(session, failures=0):
     if failures == 3:
         print(

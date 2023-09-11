@@ -7,32 +7,32 @@ obj = Artist(3)
 print(obj.getVal())
 
 #Enter a new user into the databse 
-#def addUser(self):
+def addUser(self):
     cursor.execute("""
     INSERT INTO users VALUES ({}, {},{},{})""".format())
     connection.commit()
 
-#def get_salt(user_email):
+def get_salt(user_email):
     # TODO: retrieve user salt string from db
 
     return "fake_salt"
 
 
-#def is_locked(user_email):
+def is_locked(user_email):
     # TODO: return lock status from db
 
     return False
 
 
-#def lock_user(user_email):
+def lock_user(user_email):
     # TODO: set user to locked in db
 
     return
 
 
-#def verify_password(salted_and_hashed_password):
+def verify_password(salted_and_hashed_password):
     # TODO: verify encrypted string against db
 
     return True
 
-#connection.close()
+connection.close()

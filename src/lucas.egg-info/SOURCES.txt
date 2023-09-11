@@ -1,0 +1,16 @@
+setup.py
+api/__init__.py
+data_access/__init__.py
+data_access/user_dao.py
+lucas.egg-info/PKG-INFO
+lucas.egg-info/SOURCES.txt
+lucas.egg-info/dependency_links.txt
+lucas.egg-info/top_level.txt
+model/__init__.py
+model/artifact.py
+model/artist.py
+model/copyrightable_material.py
+util/__init__.py
+util/checksum_util.py
+util/encryption_util.py
+util/otp_util.py
