@@ -1,9 +1,22 @@
-from data_access.user_dao import get_salt, is_locked, lock_user, verify_password
+from data_access.user_dao import *
 from getpass import getpass
 from util.encryption_util import hash_data
 from util.otp_util import send_otp_to_email
+from model.user import User
 
+
+def login_session(session):
+    email = input("Email:")
+    if is_email_registered(email):
+        print("user is already registed")
+    else: 
+        password = input("Enter password: ")
+        first_name = input("Enter first name: ")
+        surname = input("Enter last name: ")
+        addUser(first_name, surname, email, password)
+    
 def initiate_session(session, failures=0):
+
     if failures == 3:
         print(
             "You have failed to log in 3 times in a row, your account has been locked"
