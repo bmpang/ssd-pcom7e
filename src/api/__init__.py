@@ -7,20 +7,25 @@ from model.user import User
 def initiate_session(failures=0):
     email = input("Email:")
     if is_email_registered(email):
-        attempt = 1
-        while attempt < 4:
-            user_password = input("Enter your user password:")
-            if user_auth(email, user_password):
-                print("User logged in successfully")
-                view_all_tracks()
-            else:
-                print("Password incorrect - please try again!")
-                attempt = attempt + 1
-                if attempt == 4: 
-                    lock_user(email)
-                    print("Your user account has been locked - please reach out the system administrator to unlock your account")
+        if is_locked(email):
+            print("Your user account is currently locked - please reach out the system administrator to unlock your account")
+        else:
+            attempt = 1
+            while attempt < 4:
+                user_password = input("Enter your user password:")
+                if user_auth(email, user_password):
+                    print("User logged in successfully")
+                    logged_user_as(email)
+                    break
+                else:
+                    print("Password incorrect - please try again!")
+                    attempt = attempt + 1
+                    if attempt == 4: 
+                        lock_user(email)
+                        print("Your user account has been locked - please reach out the system administrator to unlock your account")
     else: 
         register(email)
+    return
 
     # if failures == 3:
     #     print(
@@ -60,6 +65,15 @@ def initiate_session(failures=0):
     #     else:
     #         session.otp_verified = True
 
+def logged_user_as(email):
+    if user_type(email) == "ADMIN":
+        view_all_tracks()
+        print("All locked users:")
+        view_all_locked_users()
+        unlock_user_id = input("Enter the ID of the user you wish to unlock or '0' to cancel:")
+        unlock_user(unlock_user_id)
+        print(f"The user {get_user(unlock_user_id)[0]} has been unlocked")
+    return
 
  
 def create_artist():
@@ -89,12 +103,12 @@ def modify_artifact():
     # Todo: Brandon
     return
 
-
-def unlock_user():
-    # Todo: Lucas
+#This function unlocks a user account which was locked after 3 incorrect provided password
+def unlock_user(user_id):
+    unlock_user_ID(user_id)
     return
 
-
+#This funtion registers a new user and adds them to the database table users
 def register(email):
     password = input("Enter password: ")
     first_name = input("Enter first name: ")

@@ -4,6 +4,6 @@ from data_access.app_dao import admin_default
 
 if __name__ == "__main__":
     #session = Session()
-    #creats the table "users" and an admin system account named "admin@trackmanagement.com"
+    #creates the table "users" and an admin system account named "admin@trackmanagement.com"
     admin_default()
     initiate_session()
