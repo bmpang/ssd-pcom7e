@@ -1,70 +1,79 @@
-from data_access.user_dao import *
+from data_access.app_dao import *
 from getpass import getpass
 from util.encryption_util import hash_data
 from util.otp_util import send_otp_to_email
 from model.user import User
-
-
-def login_session(session):
+    
+def initiate_session(failures=0):
     email = input("Email:")
     if is_email_registered(email):
-        print("user is already registed")
+        attempt = 1
+        while attempt < 4:
+            user_password = input("Enter your user password:")
+            if user_auth(email, user_password):
+                print("User logged in successfully")
+                view_all_tracks()
+            else:
+                print("Password incorrect - please try again!")
+                attempt = attempt + 1
+                if attempt == 4: 
+                    lock_user(email)
+                    print("Your user account has been locked - please reach out the system administrator to unlock your account")
     else: 
-        password = input("Enter password: ")
-        first_name = input("Enter first name: ")
-        surname = input("Enter last name: ")
-        addUser(first_name, surname, email, password)
-    
-def initiate_session(session, failures=0):
+        register(email)
 
-    if failures == 3:
-        print(
-            "You have failed to log in 3 times in a row, your account has been locked"
-        )
-        lock_user(session.user_email)
-        raise Exception
+    # if failures == 3:
+    #     print(
+    #         "You have failed to log in 3 times in a row, your account has been locked"
+    #     )
+    #     lock_user(session.user_email)
+    #     raise Exception
 
-    if not session.user_email:
-        session.user_email = input("Email: ")
+    # if not session.user_email:
+    #     session.user_email = input("Email: ")
 
-    if is_locked(session.user_email):
-        print(
-            "Your account is locked, please reach out to an administrator for help regaining access"
-        )
-        raise Exception
+    # if is_locked(session.user_email):
+    #     print(
+    #         "Your account is locked, please reach out to an administrator for help regaining access"
+    #     )
+    #     raise Exception
 
-    if not session.password_verified:
-        user_salt = get_salt(session.user_email)
-        # The password is salted immediately so that the user's plain password is never stored in memory
-        # the python native getpass method also hides the text from the cli
-        salted_and_hashed_password = hash_data(getpass(prompt="Password: "), user_salt)
+    # if not session.password_verified:
+    #     user_salt = get_salt(session.user_email)
+    #     # The password is salted immediately so that the user's plain password is never stored in memory
+    #     # the python native getpass method also hides the text from the cli
+    #     salted_and_hashed_password = hash_data(getpass(prompt="Password: "), user_salt)
 
-        if not verify_password(salted_and_hashed_password):
-            initiate_session(session, failures + 1)
-        else:
-            session.password_verified = True
+    #     if not verify_password(salted_and_hashed_password):
+    #         initiate_session(session, failures + 1)
+    #     else:
+    #         session.password_verified = True
 
-    if not session.otp_verified:
-        print("Sending you a one time passcode")
-        otp_code = send_otp_to_email(session.user_email)
+    # if not session.otp_verified:
+    #     print("Sending you a one time passcode")
+    #     otp_code = send_otp_to_email(session.user_email)
 
-        input_otp = input("OTP Code: ")
+    #     input_otp = input("OTP Code: ")
 
-        if input_otp != otp_code:
-            initiate_session(session, failures + 1)
-        else:
-            session.otp_verified = True
+    #     if input_otp != otp_code:
+    #         initiate_session(session, failures + 1)
+    #     else:
+    #         session.otp_verified = True
 
 
+ 
 def create_artist():
-    # Todo: Brandon
+    # Todo: Brandon - this is already done
     return
 
-
+#we dont need to modify an artist
 def modify_artist():
-    # Todo: Brandon
+    # Todo: Brandon - this is not needed
     return
 
+def view_all_tracks():
+    # Todo: Brandon
+    return 
 
 def create_artifact():
     # Todo: Brandon
@@ -86,6 +95,19 @@ def unlock_user():
     return
 
 
-def register():
-    # Todo: Lucas
+def register(email):
+    password = input("Enter password: ")
+    first_name = input("Enter first name: ")
+    surname = input("Enter last name: ")  
+    acct_status = "active"     
+    role = ""
+    while role != "ARTIST" and role != "ADMIN":
+        role = input("Enter ARTIST or ADMIN:")
+        if role != "ARTIST" and role != "ADMIN":
+            print("You must choose ARTIST or ADMIN")
+    if role == "ARTIST":
+        print("Welcome new Artist")
+        addUser(first_name, surname, email, password, role, acct_status)
+    if role == "ADMIN":
+        print("Your Admin request will be sent to the Administor for approval")
     return

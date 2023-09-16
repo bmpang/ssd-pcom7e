@@ -2,8 +2,7 @@
 
 #Class User used for new users including Artist & Administrators
 class User:
-    def __init__(self, user_id, first_name, surname, email, password):
-        self.user_id = user_id
+    def __init__(self, first_name, surname, email, password):
         self.first_name = first_name
         self.surname = surname
         self.email = email
