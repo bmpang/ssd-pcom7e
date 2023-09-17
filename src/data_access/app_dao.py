@@ -267,7 +267,6 @@ def create_artifact(artifact):
     # Close the connection
     cursor.close()
     connection.close()
-    print("Artifact added successfully.")
 
 
 # Get summaries for all copyrightable material artifacts
@@ -314,3 +313,28 @@ def get_file_info_from_artifact(artist_id, title, type):
     cursor.close()
     connection.close()
     return file_info
+
+
+def update_artifact(artifact):
+    connection = sqlite3.connect("trackmanagement.db")
+    cursor = connection.cursor()
+    query = """UPDATE artifact SET file_size_bytes = ?, file_extension = ?, checksum = ?, encrypted_data = ? WHERE artist_id = ? and title = ? and type = ?"""
+
+    cursor.execute(
+        query,
+        (
+            artifact.file_size_bytes,
+            artifact.file_extension,
+            artifact.checksum,
+            artifact.encrypted_data,
+            artifact.artist_id,
+            artifact.title,
+            artifact.copyrightable_material_type,
+        ),
+    )
+
+    # Commit the changes
+    connection.commit()
+    # Close the connection
+    cursor.close()
+    connection.close()

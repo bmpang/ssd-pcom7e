@@ -126,9 +126,37 @@ def download_from_artifact(artist_id):
     print("Copyrightable material was successfully downloaded to the working directory")
 
 
-def modify_artifact():
-    input("Which")
-    return
+def modify_artifact(artist_id):
+    title = input("Which song would you like to download?")
+    copyrightable_material_type = input(
+        "What type of copyrightable material would you like to download for " + title
+    )
+
+    if not artifact_exists(artist_id, title, copyrightable_material_type):
+        print(
+            "We could not find a "
+            + copyrightable_material_type
+            + " artifact for "
+            + title
+        )
+        print("Please check your spelling and try again")
+        return
+
+    file_path = input("Please input the filepath for your copyrightable material")
+
+    try:
+        copyrightable_material = CopyrightableMaterial(
+            artist_id, title, file_path, copyrightable_material_type.upper()
+        )
+    except FileSizeTooLargeException:
+        print("The file you have pathed too is too large.")
+    except InvalidCopyrightableMaterialTypeException:
+        print("Please pick a material type of AUDIO, LYRICS, or SCORE")
+
+    artifact = Artifact(copyrightable_material)
+    update_artifact(artifact)
+
+    print("Successfully modified artifact")
 
 
 # This function unlocks a user account which was locked after 3 incorrect provided password

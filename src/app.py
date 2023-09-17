@@ -35,6 +35,27 @@ def prompt():
             view_artists_artifacts(sess.user_id)
             prompt()
 
+        should_call_download_from_artifact = (
+            input(
+                "Would you like to download copyrightable material from a currently managed artifact - Y/N?"
+            ).upper()
+            == "Y"
+        )
+
+        if should_call_download_from_artifact:
+            download_from_artifact(sess.user_id)
+            prompt()
+
+        should_call_modify_artifact = (
+            input(
+                "Would you like to upload a new version of a currently managed copyrightable material - Y/N?"
+            ).upper()
+            == "Y"
+        )
+
+        if should_call_modify_artifact:
+            modify_artifact(sess.user_id)
+            prompt()
     else:
         print(
             "Here are the summaries of all the copyrightable material artifacts managed in the system:"
