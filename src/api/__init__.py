@@ -1,6 +1,12 @@
 from getpass import getpass
 
 from data_access.app_dao import *
+from model.artifact import Artifact
+from model.copyrightable_material import (
+    CopyrightableMaterial,
+    FileSizeTooLargeException,
+    InvalidCopyrightableMaterialTypeException,
+)
 from model.user import User
 from util.encryption_util import create_salt, hash_data
 from util.otp_util import send_otp_to_email
@@ -51,19 +57,29 @@ def logged_user_as(email):
     return
 
 
-def create_artist():
-    # Todo: Brandon - this is already done
-    return
-
-
 def view_all_tracks():
     # Todo: Brandon
     return
 
 
 def create_artifact():
-    # Todo: Brandon
-    return
+    copyrightable_material_type = input(
+        "What type of copyrightable material would you like to add - AUDIO, LYRICS, or SCORE?"
+    )
+    file_path = input("Please input the filepath for your copyrightable material")
+
+    try:
+        copyrightable_material = CopyrightableMaterial(
+            file_path, copyrightable_material_type.upper()
+        )
+    except FileSizeTooLargeException:
+        print("The file you have pathed too is too large.")
+    except InvalidCopyrightableMaterialTypeException:
+        print("Please pick a material type of AUDIO, LYRICS, or SCORE")
+
+    artifact = Artifact(copyrightable_material)
+
+    create_artifact(artifact)
 
 
 def get_artifact():

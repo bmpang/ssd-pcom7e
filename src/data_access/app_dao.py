@@ -194,7 +194,49 @@ def get_user(user_id):
     return results
 
 
-def verify_password(salted_and_hashed_password):
-    # TODO: verify encrypted string against db
+# Boot strap the table that holds artifacts for copyrightable material
 
-    return True
+
+def create_artifacts_table():
+    connection = sqlite3.connect("trackmanagement.db")
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS artifacts (
+            artifact_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            artist_id INTEGER,
+            title TEXT,
+            type TEXT,
+            file_size_bytes INTEGER,
+            file_extension TEXT,
+            checksum TEXT UNIQUE,
+            encrypted_data TEXT,
+            
+            FOREIGN KEY (artist_id)
+                REFERENCES users (user_id)
+        )"""
+    )
+
+
+def create_artifact(artifact):
+    connection = sqlite3.connect("trackmanagement.db")
+    cursor = connection.cursor()
+    query = """INSERT INTO artifacts (artist_id, title, type, file_size_bytes, file_extension, checksum, encrypted_data) VALUES (?, ?, ?, ?)"""
+    cursor.execute(
+        query,
+        (
+            artifact.artist_id,
+            artifact.title,
+            artifact.copyrightable_material_type,
+            artifact.file_size_bytes,
+            artifact.file_extension,
+            artifact.checksum,
+            artifact.encrypted_data,
+        ),
+    )
+    # Commit the changes
+    connection.commit()
+    # Close the connection
+    cursor.close()
+    connection.close()
+    print("Artifact added successfully.")
