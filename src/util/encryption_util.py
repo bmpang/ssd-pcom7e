@@ -1,4 +1,4 @@
-from hashlib import md5
+from hashlib import sha256
 from secrets import choice
 from string import ascii_letters, digits
 
@@ -25,4 +25,4 @@ def decrypt(encrypted_data):
 def hash_data(data, salt):
     salted_data = salt.encode("utf-8") + data.encode("utf-8")
 
-    return md5(salted_data).hexdigest()
+    return sha256(salted_data).hexdigest()

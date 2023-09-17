@@ -1,8 +1,8 @@
-from hashlib import md5
+from hashlib import sha256
 
 
 def generate_checksum_from_bytes(bytes):
-    return md5(bytes).hexdigest()
+    return sha256(bytes).hexdigest()
 
 
 def generate_checksum_from_file(file_path):
