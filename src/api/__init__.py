@@ -11,6 +11,7 @@ from util.encryption_util import create_salt, decrypt, hash_data
 from util.otp_util import send_otp_to_email
 
 
+# This function will either logon or register a user and initialize the app to be aware of the user's role and identity
 def initiate_session(sess):
     sess.user_email = input("Email:")
     if is_email_registered(sess.user_email):
@@ -20,6 +21,7 @@ def initiate_session(sess):
     return
 
 
+# This function verifies a user's account is unlocked and that they have the correct password before initializing the session
 def log_on(sess):
     if is_locked(sess.user_email):
         print(
@@ -45,6 +47,7 @@ def log_on(sess):
                     )
 
 
+# this method shows summaries for all copyrightable materials by all artists currently managed in the system
 def view_all_artifacts():
     artifact_summaries = []
 
@@ -56,6 +59,7 @@ def view_all_artifacts():
     return artifact_summaries
 
 
+# this method creates a new artifact of an inputted material type and serializes an encrypted copy of it to our database
 def create_artifact(artist_id):
     title = input(
         "What is the title of the work you are uploading copyrightable material for?"
@@ -88,6 +92,7 @@ def create_artifact(artist_id):
     print("Successfully created an artifact for your copyrightable material")
 
 
+# This method retrieves summaries of copyrightable material belonging to a single artist
 def view_artists_artifacts(artist_id):
     artifact_summaries = []
 
@@ -97,6 +102,7 @@ def view_artists_artifacts(artist_id):
     return artifact_summaries
 
 
+# this method retrieves the encrypted copy of an existing artifact and saves it to an unencrypted local file
 def download_from_artifact(artist_id):
     title = input("Which song would you like to download?")
     copyrightable_material_type = input(
@@ -126,6 +132,7 @@ def download_from_artifact(artist_id):
     print("Copyrightable material was successfully downloaded to the working directory")
 
 
+# This method allows an artist to upload a new file/version of an existing material
 def modify_artifact(artist_id):
     title = input("Which song would you like to download?")
     copyrightable_material_type = input(
