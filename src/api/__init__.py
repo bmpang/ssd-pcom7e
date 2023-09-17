@@ -7,6 +7,7 @@ from model.copyrightable_material import (
     FileSizeTooLargeException,
     InvalidCopyrightableMaterialTypeException,
 )
+from util.checksum_util import generate_checksum_from_bytes
 from util.encryption_util import create_salt, decrypt, hash_data
 from util.otp_util import send_otp_to_email
 
@@ -109,7 +110,9 @@ def download_from_artifact(artist_id):
         "What type of copyrightable material would you like to download for " + title
     )
 
-    if not artifact_exists(artist_id, title, copyrightable_material_type):
+    artifact_id = get_artifact_id(artist_id, title, copyrightable_material_type)
+
+    if not artifact_id:
         print(
             "We could not find a "
             + copyrightable_material_type
@@ -125,6 +128,13 @@ def download_from_artifact(artist_id):
 
     file_name = file_info[0] + "_" + file_info[1] + "." + file_info[2]
     file_data = decrypt(file_info[3])
+
+    local_checksum = generate_checksum_from_bytes(file_name)
+    stored_checksum = get_checksum(artist_id, title, copyrightable_material_type)
+
+    if local_checksum != stored_checksum:
+        print("Checksum error. Please contact an administrator")
+        return
 
     with open(file_name, "wb") as new_file:
         new_file.write(file_data)

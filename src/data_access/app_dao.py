@@ -236,14 +236,46 @@ def create_artifacts_table():
     connection.close()
 
 
-def artifact_exists(artist_id, title, type):
+def get_artifact_id(artist_id, title, type):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
-    query = """SELECT count(*) from artifacts where artist_id = ? and title = ? and type = ?"""
+    query = """SELECT artifact_id from artifacts where artist_id = ? and title = ? and type = ?"""
 
     cursor.execute(query, (artist_id, title, type))
 
-    return cursor.fetchone()[0] > 0
+    result = cursor.fetchone()
+
+    # Close the connection
+    cursor.close()
+    connection.close()
+
+    if result:
+        return result[0]
+    else:
+        return None
+
+
+def get_checksum(artist_id, title, type):
+    connection = sqlite3.connect("trackmanagement.db")
+    cursor = connection.cursor()
+    query = """SELECT checksum from artifacts where artist_id = ? and title = ? and type = ?"""
+
+    cursor.execute(query, (artist_id, title, type))
+
+    result = cursor.fetchone()
+
+    # Close the connection
+    cursor.close()
+    connection.close()
+
+    if result:
+        return result[0]
+    else:
+        return None
+
+
+def artifact_exists(artist_id, title, type):
+    return get_artifact_id(artist_id, title, type) is not None
 
 
 def create_artifact(artifact):
@@ -273,7 +305,7 @@ def create_artifact(artifact):
 def get_artifact_summaries():
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
-    query = """SELECT users.first_name || ' ' || users.surname as artist_name, artifact.title as title, artifact.type as type FROM artifacts inner join users on artifacts.artist_id = users.id"""
+    query = """SELECT users.first_name || ' ' || users.surname as artist_name, artifact.title as title, artifact.type as type FROM artifacts inner join users on artifacts.artist_id = users.user_id"""
     cursor.execute(
         query,
     )

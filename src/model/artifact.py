@@ -1,4 +1,4 @@
-from util.checksum_util import generate_checksum
+from util.checksum_util import generate_checksum_from_file
 from util.encryption_util import encrypt
 
 
@@ -17,5 +17,5 @@ class Artifact:
         self.copyrightable_material_type = copyrightable_material.type
         self.file_size_bytes = copyrightable_material.file_size_bytes
         self.file_extension = copyrightable_material.file_extension
-        self.checksum = generate_checksum(copyrightable_material.file_path)
+        self.checksum = generate_checksum_from_file(copyrightable_material.file_path)
         self.data = encrypt(copyrightable_material.file_path)
