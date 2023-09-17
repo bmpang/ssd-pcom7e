@@ -2,7 +2,7 @@ from getpass import getpass
 
 from data_access.app_dao import *
 from model.user import User
-from util.encryption_util import hash_data
+from util.encryption_util import create_salt, hash_data
 from util.otp_util import send_otp_to_email
 
 
@@ -14,10 +14,14 @@ def initiate_session(failures=0):
                 "Your user account is currently locked - please reach out the system administrator to unlock your account"
             )
         else:
+            salt = get_salt(email)
             attempt = 1
             while attempt < 4:
-                user_password = input("Enter your user password:")
-                if user_auth(email, user_password):
+                salted_and_hashed_password = hash_data(
+                    getpass("Enter password: "), salt
+                )
+
+                if user_auth(email, salted_and_hashed_password):
                     print("User logged in successfully")
                     logged_user_as(email)
                     break
@@ -32,44 +36,6 @@ def initiate_session(failures=0):
     else:
         register(email)
     return
-
-    # if failures == 3:
-    #     print(
-    #         "You have failed to log in 3 times in a row, your account has been locked"
-    #     )
-    #     lock_user(session.user_email)
-    #     raise Exception
-
-    # if not session.user_email:
-    #     session.user_email = input("Email: ")
-
-    # if is_locked(session.user_email):
-    #     print(
-    #         "Your account is locked, please reach out to an administrator for help regaining access"
-    #     )
-    #     raise Exception
-
-    # if not session.password_verified:
-    #     user_salt = get_salt(session.user_email)
-    #     # The password is salted immediately so that the user's plain password is never stored in memory
-    #     # the python native getpass method also hides the text from the cli
-    #     salted_and_hashed_password = hash_data(getpass(prompt="Password: "), user_salt)
-
-    #     if not verify_password(salted_and_hashed_password):
-    #         initiate_session(session, failures + 1)
-    #     else:
-    #         session.password_verified = True
-
-    # if not session.otp_verified:
-    #     print("Sending you a one time passcode")
-    #     otp_code = send_otp_to_email(session.user_email)
-
-    #     input_otp = input("OTP Code: ")
-
-    #     if input_otp != otp_code:
-    #         initiate_session(session, failures + 1)
-    #     else:
-    #         session.otp_verified = True
 
 
 def logged_user_as(email):
@@ -87,14 +53,6 @@ def logged_user_as(email):
 
 def create_artist():
     # Todo: Brandon - this is already done
-    return
-
-
-# we dont need to modify an artist
-
-
-def modify_artist():
-    # Todo: Brandon - this is not needed
     return
 
 
@@ -130,7 +88,9 @@ def unlock_user(user_id):
 
 
 def register(email):
-    password = input("Enter password: ")
+    salt = create_salt()
+    # Immediately salt and hash the password so that the credential is never stored in memory, for privacy and security
+    salted_and_hashed_password = hash_data(getpass("Enter password: "), salt)
     first_name = input("Enter first name: ")
     surname = input("Enter last name: ")
     acct_status = "active"
@@ -141,7 +101,15 @@ def register(email):
             print("You must choose ARTIST or ADMIN")
     if role == "ARTIST":
         print("Welcome new Artist")
-        addUser(first_name, surname, email, password, role, acct_status)
+        addUser(
+            first_name,
+            surname,
+            email,
+            salted_and_hashed_password,
+            role,
+            acct_status,
+            salt,
+        )
     if role == "ADMIN":
         print("Your Admin request will be sent to the Administor for approval")
     return

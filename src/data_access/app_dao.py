@@ -20,7 +20,8 @@ def admin_default():
             email TEXT UNIQUE,
             password TEXT,
             role TEXT,
-            acct_status TEXT
+            acct_status TEXT,
+            salt TEXT
         )"""
     )
     if is_email_registered("admin@trackmanagement.com"):
@@ -28,7 +29,7 @@ def admin_default():
         connection.close()
         return
     else:
-        query = """INSERT INTO users (first_name, surname, email, password, role, acct_status) VALUES (?, ?, ?, ?, ?, ?)"""
+        query = """INSERT INTO users (first_name, surname, email, password, role, acct_status, salt) VALUES (?, ?, ?, ?, ?, ?, ?)"""
         cursor.execute(
             query,
             (
@@ -38,6 +39,7 @@ def admin_default():
                 "TMadmin20@",
                 "ADMIN",
                 "active",
+                "QiZ2wX4v",
             ),
         )
         # Commit the changes
@@ -65,11 +67,13 @@ def is_email_registered(email):
 # Enter a new user into the databse
 
 
-def addUser(first_name, surname, email, password, role, acct_status):
+def addUser(first_name, surname, email, password, role, acct_status, salt):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
-    query = """INSERT INTO users (first_name, surname, email, password, role, acct_status) VALUES (?, ?, ?, ?, ?, ?)"""
-    cursor.execute(query, (first_name, surname, email, password, role, acct_status))
+    query = """INSERT INTO users (first_name, surname, email, password, role, acct_status, salt) VALUES (?, ?, ?, ?, ?, ?, ?)"""
+    cursor.execute(
+        query, (first_name, surname, email, password, role, acct_status, salt)
+    )
     # Commit the changes
     connection.commit()
     # Close the connection
@@ -93,10 +97,14 @@ def user_auth(email, user_password):
         return False
 
 
+# This function gets the salt used for obfuscating a user's password to check the hash output of an inputted password
 def get_salt(user_email):
-    # TODO: retrieve user salt string from db
+    connection = sqlite3.connect("trackmanagement.db")
+    cursor = connection.cursor()
+    query = """SELECT * FROM users WHERE email = ?"""
+    cursor.execute(query, (user_email,))
 
-    return "fake_salt"
+    return cursor.fetchone()[7]
 
 
 # This function verifies if a user account is locked
