@@ -14,11 +14,24 @@ def bootstrap_database():
 def prompt():
     if sess.role == "ARTIST":
         should_call_create_artifact = (
-            input("Would you like to add a new track - Y/N?").upper() == "Y"
+            input(
+                "Would you like to add a new copyrightable material artifact - Y/N?"
+            ).upper()
+            == "Y"
         )
 
         if should_call_create_artifact:
             create_artifact(sess.user_id)
+
+        should_call_view_artists_artifacts = (
+            input(
+                "Would you like to see your currently managed copyrightable material - Y/N?"
+            ).upper()
+            == "Y"
+        )
+
+        if should_call_view_artists_artifacts:
+            view_artists_artifacts(sess.user_id)
 
     else:
         print(

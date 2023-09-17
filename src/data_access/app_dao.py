@@ -274,3 +274,19 @@ def get_artifact_summaries():
     cursor.close()
     connection.close()
     return results
+
+
+# Get summaries for all of one artist's copyrightable material artifacts
+
+
+def get_artists_artifact_summaries(artist_id):
+    connection = sqlite3.connect("trackmanagement.db")
+    cursor = connection.cursor()
+    query = """title, type FROM artifacts where artist_id = ?"""
+    cursor.execute(query, (artist_id,))
+
+    results = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+    return results

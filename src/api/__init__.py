@@ -80,6 +80,15 @@ def create_artifact(artist_id):
     create_artifact(artifact)
 
 
+def view_artists_artifacts(artist_id):
+    artifact_summaries = []
+
+    for summary_list in get_artists_artifact_summaries(artist_id):
+        artifact_summaries.append(summary_list[1] + " for " + summary_list[0])
+
+    return artifact_summaries
+
+
 def download_artifact():
     # Todo
     return
