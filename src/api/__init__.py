@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 from getpass import getpass
+from sqlite3 import IntegrityError
 
 from data_access.app_dao import *
 from model.artifact import Artifact
@@ -99,8 +100,12 @@ def create_artifact(artist_id):
 
     artifact = Artifact(copyrightable_material)
 
-    create_artifact_row(artifact)
-    time = datetime.now()
+    try:
+        create_artifact_row(artifact)
+        time = datetime.now()
+    except IntegrityError:
+        print("That file is already being managed as copyrightable material. Please check your path and try again.")
+        return
 
     artifact_id = get_artifact_id(artist_id, title, copyrightable_material_type)
     create_artifact_audit_log(artist_id, artifact_id, "Created", time)
@@ -189,8 +194,13 @@ def modify_artifact(artist_id):
         print("Please pick a material type of AUDIO, LYRICS, or SCORE")
 
     artifact = Artifact(copyrightable_material)
-    update_artifact(artifact)
-    time = datetime.now()
+
+    try:
+        update_artifact(artifact)
+        time = datetime.now()
+    except IntegrityError:
+        print("That file is already being managed as copyrightable material. Please check your path and try again.")
+        return
 
     artifact_id = get_artifact_id(artist_id, title, copyrightable_material_type)
     create_artifact_audit_log(artist_id, artifact_id, "Modified", time)
@@ -258,7 +268,7 @@ def register(sess):
     acct_status = "active"
     role = ""
     while role != "ARTIST" and role != "ADMIN":
-        role = input("Enter ARTIST or ADMIN:")
+        role = input("Enter ARTIST or ADMIN: ")
         if role != "ARTIST" and role != "ADMIN":
             print("You must choose ARTIST or ADMIN")
 
