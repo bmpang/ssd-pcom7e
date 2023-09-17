@@ -34,7 +34,6 @@ def admin_default():
                 "Admin",
                 "Admin",
                 "admin@trackmanagement.com",
-                # TMadmin20@:
                 "e0a89c103f84f78e296a6a7257fdb28b43f7b0f6f89145756d40bb6bd867700c",
                 "ADMIN",
                 "active",

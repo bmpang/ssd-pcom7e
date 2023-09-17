@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 from getpass import getpass
+import pwinput
 from sqlite3 import IntegrityError
 
 from data_access.app_dao import *
@@ -35,7 +36,9 @@ def log_on(sess):
         salt = get_salt(sess.user_email)
         attempt = 1
         while attempt < 4:
-            salted_and_hashed_password = hash_data(getpass("Enter password: "), salt)
+            
+            #salted_and_hashed_password = hash_data(input("Enter password: "), salt)
+            salted_and_hashed_password = hash_data(pwinput.pwinput(prompt='Password: ', mask='*'), salt)
 
             if user_auth(sess.user_email, salted_and_hashed_password):
                 print("User logged in successfully")
