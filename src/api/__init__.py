@@ -1,3 +1,4 @@
+from datetime import datetime
 from getpass import getpass
 
 from data_access.app_dao import *
@@ -89,6 +90,10 @@ def create_artifact(artist_id):
     artifact = Artifact(copyrightable_material)
 
     create_artifact(artifact)
+    time = datetime.now()
+
+    artifact_id = get_artifact_id(artist_id, title, copyrightable_material_type)
+    create_artifact_audit_log(artist_id, artifact_id, "Created", time)
 
     print("Successfully created an artifact for your copyrightable material")
 
@@ -125,6 +130,9 @@ def download_from_artifact(artist_id):
     file_info = get_file_info_from_artifact(
         artist_id, title, copyrightable_material_type
     )
+    time = datetime.now()
+
+    create_artifact_audit_log(artist_id, artifact_id, "Downloaded", time)
 
     file_name = file_info[0] + "_" + file_info[1] + "." + file_info[2]
     file_data = decrypt(file_info[3])
@@ -172,6 +180,10 @@ def modify_artifact(artist_id):
 
     artifact = Artifact(copyrightable_material)
     update_artifact(artifact)
+    time = datetime.now()
+
+    artifact_id = get_artifact_id(artist_id, title, copyrightable_material_type)
+    create_artifact_audit_log(artist_id, artifact_id, "Modified", time)
 
     print("Successfully modified artifact")
 

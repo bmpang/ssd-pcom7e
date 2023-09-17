@@ -1,5 +1,9 @@
 from api import *
-from data_access.app_dao import admin_default, create_artifacts_table
+from data_access.app_dao import (
+    admin_default,
+    create_artifacts_audit_table,
+    create_artifacts_table,
+)
 from session import Session
 
 
@@ -9,6 +13,8 @@ def bootstrap_database():
     admin_default()
     # creates the table for copyrightable material artifacts
     create_artifacts_table()
+    # creates the artifact audit table for logging timestamps
+    create_artifacts_audit_table()
 
 
 def prompt():

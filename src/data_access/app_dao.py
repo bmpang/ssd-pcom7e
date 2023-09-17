@@ -1,8 +1,6 @@
 import sqlite3
 import sys
 
-from model.artist import Artist
-
 sys.path.insert(0, "..")
 connection = sqlite3.connect("trackmanagement.db")
 cursor = connection.cursor()
@@ -365,6 +363,48 @@ def update_artifact(artifact):
         ),
     )
 
+    # Commit the changes
+    connection.commit()
+    # Close the connection
+    cursor.close()
+    connection.close()
+
+
+# Create the artifact audit table
+
+
+def create_artifacts_audit_table():
+    connection = sqlite3.connect("trackmanagement.db")
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS artifact_audit (
+            audit INTEGER PRIMARY KEY AUTOINCREMENT,
+            artist_id INTEGER,
+            artifact_id INTEGER
+            action TEXT,
+            time TEXT,
+            
+            FOREIGN KEY (artist_id)
+                REFERENCES users (user_id)
+
+            FOREIGN KEY (artifact_id)
+                REFERENCES artifacts (artifact_id)
+        )"""
+    )
+
+    cursor.close()
+    connection.close()
+
+
+def create_artifact_audit_log(artist_id, artifact_id, action, time):
+    connection = sqlite3.connect("trackmanagement.db")
+    cursor = connection.cursor()
+    query = """INSERT INTO artifact_audit (artist_id, artifact_id, action, time) VALUES (?, ?, ?, ?)"""
+    cursor.execute(
+        query,
+        (artist_id, artifact_id, action, time),
+    )
     # Commit the changes
     connection.commit()
     # Close the connection
