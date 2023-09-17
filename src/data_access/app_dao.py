@@ -34,7 +34,8 @@ def admin_default():
                 "Admin",
                 "Admin",
                 "admin@trackmanagement.com",
-                "TMadmin20@",
+                # TMadmin20@:
+                "e0a89c103f84f78e296a6a7257fdb28b43f7b0f6f89145756d40bb6bd867700c",
                 "ADMIN",
                 "active",
                 "QiZ2wX4v",
@@ -103,6 +104,16 @@ def get_salt(user_email):
     cursor.execute(query, (user_email,))
 
     return cursor.fetchone()[7]
+
+
+# Get role
+def get_role(user_email):
+    connection = sqlite3.connect("trackmanagement.db")
+    cursor = connection.cursor()
+    query = """SELECT role FROM users WHERE email = ?"""
+    cursor.execute(query, (user_email,))
+
+    return cursor.fetchone()[0]
 
 
 # This function verifies if a user account is locked
@@ -307,13 +318,14 @@ def get_artifact_summaries():
     cursor.execute(
         query,
     )
-    
+
     results = cursor.fetchall()
     if len(results) == 0:
         return
     cursor.close()
     connection.close()
     return results
+
 
 # Get summaries for all of one artist's copyrightable material artifacts
 

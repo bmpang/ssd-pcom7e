@@ -38,7 +38,8 @@ def log_on(sess):
 
             if user_auth(sess.user_email, salted_and_hashed_password):
                 print("User logged in successfully")
-                logged_user_as(sess)
+                sess.user_id = get_user_id(sess.user_email)
+                sess.role = get_role(sess.user_email)
                 break
             else:
                 print("Password incorrect - please try again!")
@@ -51,41 +52,11 @@ def log_on(sess):
     return
 
 
-#This function creates a menu of options until the user quits by selection option "9"
-def logged_user_as(sess):
-
-    while True: 
-        #os.system('cls')
-        print("\n\tWelcome to your account!\n")
-        print("1) View my registered artifacts")
-        print("2) Upload an artifact")
-        print("3) Modify an artifact")
-        print("4) Delete an artifact")
-        print("9) Quit")
-
-        choice = input("Enter Choice:")
-        choice = choice.strip()
-
-        if (choice == "1"):
-            view_all_artifacts()
-        elif (choice=="2"):
-            create_artifact(sess.user_id)
-        elif (choice== "3"):
-            modify_artifact(sess.user_id)
-        elif (choice== "4"):
-            delete_artifact(sess.user_id)
-        elif (choice== "9"):
-            break
-        else:
-            print("Invalid Option. Please try again.")
-    return
-
-
 # this method shows summaries for all copyrightable materials by all artists currently managed in the system
 def view_all_artifacts():
     artifact_summaries = []
     if get_artifact_summaries() == None:
-        print ("No Artifacts Found")
+        print("No Artifacts Found")
     else:
         for summary_list in get_artifact_summaries():
             artifact_summaries.append(
@@ -220,10 +191,12 @@ def modify_artifact(artist_id):
 
     print("Successfully modified artifact")
 
-#This function allows an Artist to delete their artifact or the ADMIN to delete any artifact
+
+# This function allows an Artist to delete their artifact or the ADMIN to delete any artifact
+
 
 def delete_artifact():
-    #TODO
+    # TODO
     return
 
 
