@@ -64,6 +64,12 @@ def create_artifact(artist_id):
     copyrightable_material_type = input(
         "What type of copyrightable material would you like to add - AUDIO, LYRICS, or SCORE?"
     )
+
+    if artifact_exists(artist_id, title, copyrightable_material_type):
+        print(
+            "You already have an artifact for that copyrightable material. Please use the modify action to upload a new file."
+        )
+
     file_path = input("Please input the filepath for your copyrightable material")
 
     try:

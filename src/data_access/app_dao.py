@@ -236,6 +236,16 @@ def create_artifacts_table():
     connection.close()
 
 
+def artifact_exists(artist_id, title, type):
+    connection = sqlite3.connect("trackmanagement.db")
+    cursor = connection.cursor()
+    query = """SELECT count(*) from artifacts where artist_id = ? and title = ? and type = ?"""
+
+    cursor.execute(query, (artist_id, title, type))
+
+    return cursor.fetchone()[0] > 0
+
+
 def create_artifact(artifact):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
