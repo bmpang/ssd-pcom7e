@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from getpass import getpass
 
@@ -37,7 +38,7 @@ def log_on(sess):
 
             if user_auth(sess.user_email, salted_and_hashed_password):
                 print("User logged in successfully")
-                logged_user_as(sess.user_email)
+                logged_user_as(sess)
                 break
             else:
                 print("Password incorrect - please try again!")
@@ -47,18 +48,50 @@ def log_on(sess):
                     print(
                         "Your user account has been locked - please reach out the system administrator to unlock your account"
                     )
+    return
+
+
+#This function creates a menu of options until the user quits by selection option "9"
+def logged_user_as(sess):
+
+    while True: 
+        #os.system('cls')
+        print("\n\tWelcome to your account!\n")
+        print("1) View my registered artifacts")
+        print("2) Upload an artifact")
+        print("3) Modify an artifact")
+        print("4) Delete an artifact")
+        print("9) Quit")
+
+        choice = input("Enter Choice:")
+        choice = choice.strip()
+
+        if (choice == "1"):
+            view_all_artifacts()
+        elif (choice=="2"):
+            create_artifact(sess.user_id)
+        elif (choice== "3"):
+            modify_artifact(sess.user_id)
+        elif (choice== "4"):
+            delete_artifact(sess.user_id)
+        elif (choice== "9"):
+            break
+        else:
+            print("Invalid Option. Please try again.")
+    return
 
 
 # this method shows summaries for all copyrightable materials by all artists currently managed in the system
 def view_all_artifacts():
     artifact_summaries = []
-
-    for summary_list in get_artifact_summaries():
-        artifact_summaries.append(
-            summary_list[2] + " for " + summary_list[1] + " by " + summary_list[0]
-        )
-
-    return artifact_summaries
+    if get_artifact_summaries() == None:
+        print ("No Artifacts Found")
+    else:
+        for summary_list in get_artifact_summaries():
+            artifact_summaries.append(
+                summary_list[2] + " for " + summary_list[1] + " by " + summary_list[0]
+            )
+        return artifact_summaries
 
 
 # this method creates a new artifact of an inputted material type and serializes an encrypted copy of it to our database
@@ -186,6 +219,12 @@ def modify_artifact(artist_id):
     create_artifact_audit_log(artist_id, artifact_id, "Modified", time)
 
     print("Successfully modified artifact")
+
+#This function allows an Artist to delete their artifact or the ADMIN to delete any artifact
+
+def delete_artifact():
+    #TODO
+    return
 
 
 # This function unlocks a user account which was locked after 3 incorrect provided password

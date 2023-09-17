@@ -77,7 +77,7 @@ def prompt():
 
 if __name__ == "__main__":
     bootstrap_database()
-
+    
     sess = Session()
     initiate_session(sess)
 

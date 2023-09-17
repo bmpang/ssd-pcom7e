@@ -303,17 +303,17 @@ def create_artifact(artifact):
 def get_artifact_summaries():
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
-    query = """SELECT users.first_name || ' ' || users.surname as artist_name, artifact.title as title, artifact.type as type FROM artifacts inner join users on artifacts.artist_id = users.user_id"""
+    query = """SELECT users.first_name || ' ' || users.surname as artist_name, artifacts.title as title, artifacts.type as type FROM artifacts inner join users on artifacts.artist_id = users.user_id"""
     cursor.execute(
         query,
     )
-
+    
     results = cursor.fetchall()
-
+    if len(results) == 0:
+        return
     cursor.close()
     connection.close()
     return results
-
 
 # Get summaries for all of one artist's copyrightable material artifacts
 
