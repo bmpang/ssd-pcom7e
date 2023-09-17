@@ -16,9 +16,9 @@ class InvalidCopyrightableMaterialTypeException(Exception):
 class CopyrightableMaterial:
     artist_id: int
     title: str
-    file_size_bytes: int
     file_extension: str
-    data = None
+    file_path: str
+    file_size_bytes: int
     type = None
 
     def __init__(self, artist_id, title, file_path, type):
@@ -30,11 +30,7 @@ class CopyrightableMaterial:
             raise FileSizeTooLargeException
 
         self.file_extension = Path(file_path).suffix
-
-        _file = open(file_path, "rb")
-        self.data = _file
-        _file.close()
-
+        self.file_path = file_path
         if type not in COPYRIGHTABLE_MATERIAL_TYPES:
             raise InvalidCopyrightableMaterialTypeException
         self.type = type

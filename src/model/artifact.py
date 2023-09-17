@@ -17,5 +17,5 @@ class Artifact:
         self.copyrightable_material_type = copyrightable_material.type
         self.file_size_bytes = copyrightable_material.file_size_bytes
         self.file_extension = copyrightable_material.file_extension
-        self.data = encrypt(copyrightable_material.data)
-        self.checksum = generate_checksum(self.data)
+        self.checksum = generate_checksum(copyrightable_material.file_path)
+        self.data = encrypt(copyrightable_material.file_path)
