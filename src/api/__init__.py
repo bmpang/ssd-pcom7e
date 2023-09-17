@@ -62,16 +62,17 @@ def view_all_artifacts():
             artifact_summaries.append(
                 summary_list[2] + " for " + summary_list[1] + " by " + summary_list[0]
             )
-        return artifact_summaries
+        for artifact in artifact_summaries:
+            print(artifact)
 
 
 # this method creates a new artifact of an inputted material type and serializes an encrypted copy of it to our database
 def create_artifact(artist_id):
     title = input(
-        "What is the title of the work you are uploading copyrightable material for?"
+        "What is the title of the work you are uploading copyrightable material for? "
     )
     copyrightable_material_type = input(
-        "What type of copyrightable material would you like to add - AUDIO, LYRICS, or SCORE?"
+        "What type of copyrightable material would you like to add - AUDIO, LYRICS, or SCORE? "
     )
 
     if artifact_exists(artist_id, title, copyrightable_material_type):
@@ -80,20 +81,25 @@ def create_artifact(artist_id):
         )
         return
 
-    file_path = input("Please input the filepath for your copyrightable material")
+    file_path = input("Please input the filepath for your copyrightable material ")
 
     try:
         copyrightable_material = CopyrightableMaterial(
             artist_id, title, file_path, copyrightable_material_type.upper()
         )
+    except FileNotFoundError:
+        print("No file was found at the path you have provided")
+        return
     except FileSizeTooLargeException:
         print("The file you have pathed too is too large.")
+        return
     except InvalidCopyrightableMaterialTypeException:
         print("Please pick a material type of AUDIO, LYRICS, or SCORE")
+        return
 
     artifact = Artifact(copyrightable_material)
 
-    create_artifact(artifact)
+    create_artifact_row(artifact)
     time = datetime.now()
 
     artifact_id = get_artifact_id(artist_id, title, copyrightable_material_type)
@@ -109,7 +115,8 @@ def view_artists_artifacts(artist_id):
     for summary_list in get_artists_artifact_summaries(artist_id):
         artifact_summaries.append(summary_list[1] + " for " + summary_list[0])
 
-    return artifact_summaries
+    for artifact in artifact_summaries:
+        print(artifact)
 
 
 # this method retrieves the encrypted copy of an existing artifact and saves it to an unencrypted local file

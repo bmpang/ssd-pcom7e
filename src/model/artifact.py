@@ -18,4 +18,4 @@ class Artifact:
         self.file_size_bytes = copyrightable_material.file_size_bytes
         self.file_extension = copyrightable_material.file_extension
         self.checksum = generate_checksum_from_file(copyrightable_material.file_path)
-        self.data = encrypt(copyrightable_material.file_path)
+        self.encrypted_data = encrypt(copyrightable_material.file_path)

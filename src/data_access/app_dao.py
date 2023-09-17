@@ -287,10 +287,10 @@ def artifact_exists(artist_id, title, type):
     return get_artifact_id(artist_id, title, type) is not None
 
 
-def create_artifact(artifact):
+def create_artifact_row(artifact):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
-    query = """INSERT INTO artifacts (artist_id, title, type, file_size_bytes, file_extension, checksum, encrypted_data) VALUES (?, ?, ?, ?)"""
+    query = """INSERT INTO artifacts (artist_id, title, type, file_size_bytes, file_extension, checksum, encrypted_data) VALUES (?, ?, ?, ?, ?, ?, ?)"""
     cursor.execute(
         query,
         (
@@ -333,7 +333,7 @@ def get_artifact_summaries():
 def get_artists_artifact_summaries(artist_id):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
-    query = """title, type FROM artifacts where artist_id = ?"""
+    query = """SELECT title, type FROM artifacts where artist_id = ?"""
     cursor.execute(query, (artist_id,))
 
     results = cursor.fetchall()
@@ -393,7 +393,7 @@ def create_artifacts_audit_table():
         """CREATE TABLE IF NOT EXISTS artifact_audit (
             audit INTEGER PRIMARY KEY AUTOINCREMENT,
             artist_id INTEGER,
-            artifact_id INTEGER
+            artifact_id INTEGER,
             action TEXT,
             time TEXT,
             
