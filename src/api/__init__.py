@@ -1,14 +1,18 @@
-from data_access.app_dao import *
 from getpass import getpass
+
+from data_access.app_dao import *
+from model.user import User
 from util.encryption_util import hash_data
 from util.otp_util import send_otp_to_email
-from model.user import User
-    
+
+
 def initiate_session(failures=0):
     email = input("Email:")
     if is_email_registered(email):
         if is_locked(email):
-            print("Your user account is currently locked - please reach out the system administrator to unlock your account")
+            print(
+                "Your user account is currently locked - please reach out the system administrator to unlock your account"
+            )
         else:
             attempt = 1
             while attempt < 4:
@@ -20,10 +24,12 @@ def initiate_session(failures=0):
                 else:
                     print("Password incorrect - please try again!")
                     attempt = attempt + 1
-                    if attempt == 4: 
+                    if attempt == 4:
                         lock_user(email)
-                        print("Your user account has been locked - please reach out the system administrator to unlock your account")
-    else: 
+                        print(
+                            "Your user account has been locked - please reach out the system administrator to unlock your account"
+                        )
+    else:
         register(email)
     return
 
@@ -65,29 +71,37 @@ def initiate_session(failures=0):
     #     else:
     #         session.otp_verified = True
 
+
 def logged_user_as(email):
     if user_type(email) == "ADMIN":
         view_all_tracks()
         print("All locked users:")
         view_all_locked_users()
-        unlock_user_id = input("Enter the ID of the user you wish to unlock or '0' to cancel:")
+        unlock_user_id = input(
+            "Enter the ID of the user you wish to unlock or '0' to cancel:"
+        )
         unlock_user(unlock_user_id)
         print(f"The user {get_user(unlock_user_id)[0]} has been unlocked")
     return
 
- 
+
 def create_artist():
     # Todo: Brandon - this is already done
     return
 
-#we dont need to modify an artist
+
+# we dont need to modify an artist
+
+
 def modify_artist():
     # Todo: Brandon - this is not needed
     return
 
+
 def view_all_tracks():
     # Todo: Brandon
-    return 
+    return
+
 
 def create_artifact():
     # Todo: Brandon
@@ -103,17 +117,23 @@ def modify_artifact():
     # Todo: Brandon
     return
 
-#This function unlocks a user account which was locked after 3 incorrect provided password
+
+# This function unlocks a user account which was locked after 3 incorrect provided password
+
+
 def unlock_user(user_id):
     unlock_user_ID(user_id)
     return
 
-#This funtion registers a new user and adds them to the database table users
+
+# This funtion registers a new user and adds them to the database table users
+
+
 def register(email):
     password = input("Enter password: ")
     first_name = input("Enter first name: ")
-    surname = input("Enter last name: ")  
-    acct_status = "active"     
+    surname = input("Enter last name: ")
+    acct_status = "active"
     role = ""
     while role != "ARTIST" and role != "ADMIN":
         role = input("Enter ARTIST or ADMIN:")

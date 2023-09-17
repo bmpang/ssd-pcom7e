@@ -1,10 +1,15 @@
-import sys, sqlite3
+import sqlite3
+import sys
+
 from model.artist import Artist
-sys.path.insert(0,"..")
-connection = sqlite3.connect('trackmanagement.db')
+
+sys.path.insert(0, "..")
+connection = sqlite3.connect("trackmanagement.db")
 cursor = connection.cursor()
 
-#creates an application "admin" user when the app is run
+# creates an application "admin" user when the app is run
+
+
 def admin_default():
     # Create the table if it does not exist.
     cursor.execute(
@@ -21,10 +26,20 @@ def admin_default():
     if is_email_registered("admin@trackmanagement.com"):
         cursor.close()
         connection.close()
-        return 
+        return
     else:
         query = """INSERT INTO users (first_name, surname, email, password, role, acct_status) VALUES (?, ?, ?, ?, ?, ?)"""
-        cursor.execute(query, ("Admin", "Admin", "admin@trackmanagement.com", "TMadmin20@", "ADMIN", "active"))
+        cursor.execute(
+            query,
+            (
+                "Admin",
+                "Admin",
+                "admin@trackmanagement.com",
+                "TMadmin20@",
+                "ADMIN",
+                "active",
+            ),
+        )
         # Commit the changes
         connection.commit()
         # Close the connection
@@ -32,9 +47,12 @@ def admin_default():
         connection.close()
         print("Defaut Admin added to the database")
 
+
 # Check if the email is already registered.
-def is_email_registered(email):  
-    connection = sqlite3.connect('trackmanagement.db')
+
+
+def is_email_registered(email):
+    connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
     query = """SELECT * FROM users WHERE email = ?"""
     cursor.execute(query, (email,))
@@ -43,9 +61,12 @@ def is_email_registered(email):
     # Return True if the email is already registered, False otherwise.
     return len(results) > 0
 
-#Enter a new user into the databse 
+
+# Enter a new user into the databse
+
+
 def addUser(first_name, surname, email, password, role, acct_status):
-    connection = sqlite3.connect('trackmanagement.db')
+    connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
     query = """INSERT INTO users (first_name, surname, email, password, role, acct_status) VALUES (?, ?, ?, ?, ?, ?)"""
     cursor.execute(query, (first_name, surname, email, password, role, acct_status))
@@ -56,9 +77,12 @@ def addUser(first_name, surname, email, password, role, acct_status):
     connection.close()
     print("User added successfully.")
 
-#create a function to check if the password provided an user match the password in the database?
+
+# create a function to check if the password provided an user match the password in the database?
+
+
 def user_auth(email, user_password):
-    connection = sqlite3.connect('trackmanagement.db')
+    connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
     query = """SELECT * FROM users WHERE email = ?"""
     cursor.execute(query, (email,))
@@ -67,16 +91,19 @@ def user_auth(email, user_password):
         return True
     else:
         return False
-    
+
 
 def get_salt(user_email):
     # TODO: retrieve user salt string from db
 
     return "fake_salt"
 
-#This function verifies if a user account is locked
+
+# This function verifies if a user account is locked
+
+
 def is_locked(email):
-    connection = sqlite3.connect('trackmanagement.db')
+    connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
     query = """SELECT * FROM users WHERE email = ?"""
     cursor.execute(query, (email,))
@@ -86,9 +113,12 @@ def is_locked(email):
     else:
         return False
 
-#This function locks a user account after 3 unsuccessful login attempts 
+
+# This function locks a user account after 3 unsuccessful login attempts
+
+
 def lock_user(email):
-    connection = sqlite3.connect('trackmanagement.db')
+    connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
     query = """UPDATE users SET acct_status ='locked' WHERE email = ?"""
     cursor.execute(query, (email,))
@@ -99,9 +129,12 @@ def lock_user(email):
     connection.close()
     return
 
-#This function is used by Administrators to unlock a user account  
+
+# This function is used by Administrators to unlock a user account
+
+
 def unlock_user_ID(user_id):
-    connection = sqlite3.connect('trackmanagement.db')
+    connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
     query = """UPDATE users SET acct_status ='active' WHERE user_id = ?"""
     cursor.execute(query, (user_id,))
@@ -112,8 +145,9 @@ def unlock_user_ID(user_id):
     connection.close()
     return
 
-def user_type(email): 
-    connection = sqlite3.connect('trackmanagement.db')
+
+def user_type(email):
+    connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
     query = """SELECT * FROM users WHERE email = ?"""
     cursor.execute(query, (email,))
@@ -124,9 +158,12 @@ def user_type(email):
         return "ARTIST"
     return
 
-#Display all locked user accounts to the system Admin
+
+# Display all locked user accounts to the system Admin
+
+
 def view_all_locked_users():
-    connection = sqlite3.connect('trackmanagement.db')
+    connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
     query = """SELECT * FROM users WHERE acct_status = 'locked'"""
     cursor.execute(query)
@@ -135,15 +172,19 @@ def view_all_locked_users():
     print(results)
     return
 
+
 # Return the user details in a list[]
+
+
 def get_user(user_id):
-    connection = sqlite3.connect('trackmanagement.db')
+    connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
     query = """SELECT * FROM users WHERE user_id = ? """
     cursor.execute(query, (user_id,))
     # Get the results.
     results = cursor.fetchall()
     return results
+
 
 def verify_password(salted_and_hashed_password):
     # TODO: verify encrypted string against db
