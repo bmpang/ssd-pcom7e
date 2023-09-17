@@ -7,8 +7,7 @@ from model.copyrightable_material import (
     FileSizeTooLargeException,
     InvalidCopyrightableMaterialTypeException,
 )
-from model.user import User
-from util.encryption_util import create_salt, hash_data
+from util.encryption_util import create_salt, decrypt, hash_data
 from util.otp_util import send_otp_to_email
 
 
@@ -69,6 +68,7 @@ def create_artifact(artist_id):
         print(
             "You already have an artifact for that copyrightable material. Please use the modify action to upload a new file."
         )
+        return
 
     file_path = input("Please input the filepath for your copyrightable material")
 
@@ -85,6 +85,8 @@ def create_artifact(artist_id):
 
     create_artifact(artifact)
 
+    print("Successfully created an artifact for your copyrightable material")
+
 
 def view_artists_artifacts(artist_id):
     artifact_summaries = []
@@ -95,9 +97,33 @@ def view_artists_artifacts(artist_id):
     return artifact_summaries
 
 
-def download_artifact():
-    # Todo
-    return
+def download_from_artifact(artist_id):
+    title = input("Which song would you like to download?")
+    copyrightable_material_type = input(
+        "What type of copyrightable material would you like to download for " + title
+    )
+
+    if not artifact_exists(artist_id, title, copyrightable_material_type):
+        print(
+            "We could not find a "
+            + copyrightable_material_type
+            + " artifact for "
+            + title
+        )
+        print("Please check your spelling and try again")
+        return
+
+    file_info = get_file_info_from_artifact(
+        artist_id, title, copyrightable_material_type
+    )
+
+    file_name = file_info[0] + "_" + file_info[1] + "." + file_info[2]
+    file_data = decrypt(file_info[3])
+
+    with open(file_name, "wb") as new_file:
+        new_file.write(file_data)
+
+    print("Copyrightable material was successfully downloaded to the working directory")
 
 
 def modify_artifact():

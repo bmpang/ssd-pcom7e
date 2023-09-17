@@ -22,6 +22,7 @@ def prompt():
 
         if should_call_create_artifact:
             create_artifact(sess.user_id)
+            prompt()
 
         should_call_view_artists_artifacts = (
             input(
@@ -32,6 +33,7 @@ def prompt():
 
         if should_call_view_artists_artifacts:
             view_artists_artifacts(sess.user_id)
+            prompt()
 
     else:
         print(

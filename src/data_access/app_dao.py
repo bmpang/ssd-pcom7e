@@ -300,3 +300,17 @@ def get_artists_artifact_summaries(artist_id):
     cursor.close()
     connection.close()
     return results
+
+
+# get the file info for an artifact
+def get_file_info_from_artifact(artist_id, title, type):
+    connection = sqlite3.connect("trackmanagement.db")
+    cursor = connection.cursor()
+    query = """SELECT title, type, file_extension, encrypted_data from artifacts where artist_id = ? and title = ? and type = ?"""
+    cursor.execute(query, (artist_id, title, type))
+
+    file_info = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+    return file_info
