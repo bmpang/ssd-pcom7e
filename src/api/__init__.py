@@ -68,7 +68,7 @@ def create_artifact(artist_id):
 
     try:
         copyrightable_material = CopyrightableMaterial(
-            file_path, copyrightable_material_type.upper()
+            artist_id, title, file_path, copyrightable_material_type.upper()
         )
     except FileSizeTooLargeException:
         print("The file you have pathed too is too large.")
@@ -80,7 +80,7 @@ def create_artifact(artist_id):
     create_artifact(artifact)
 
 
-def get_artifact():
+def download_artifact():
     # Todo
     return
 

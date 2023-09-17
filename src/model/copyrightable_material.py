@@ -22,6 +22,8 @@ class CopyrightableMaterial:
     type = None
 
     def __init__(self, artist_id, title, file_path, type):
+        self.artist_id = artist_id
+        self.title = title
         self.file_size = getsize(file_path)
 
         if self.file_size_bytes > FILE_SIZE_LIMIT:

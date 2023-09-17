@@ -1,4 +1,4 @@
-from api import initiate_session, unlock_user, view_all_locked_users, view_all_tracks
+from api import *
 from data_access.app_dao import admin_default, create_artifacts_table
 from session import Session
 
@@ -13,9 +13,18 @@ def bootstrap_database():
 
 def prompt():
     if sess.role == "ARTIST":
-        print("hi")
+        should_call_create_artifact = (
+            input("Would you like to add a new track - Y/N?").upper() == "Y"
+        )
+
+        if should_call_create_artifact:
+            create_artifact(sess.user_id)
+
     else:
-        view_all_tracks()
+        print(
+            "Here are the summaries of all the copyrightable material artifacts managed in the system:"
+        )
+        view_all_artifacts()
         print("All locked users:")
         view_all_locked_users()
         unlock_user_id = input(
