@@ -151,6 +151,9 @@ def unlock_user_ID(user_id):
     # Close the connection
     cursor.close()
     connection.close()
+
+    print(f"The user {get_user(user_id)[0]} has been unlocked")
+
     return
 
 
@@ -194,6 +197,18 @@ def get_user(user_id):
     return results
 
 
+# Fetch a user's id given their email
+
+
+def get_user_id(email):
+    connection = sqlite3.connect("trackmanagement.db")
+    cursor = connection.cursor()
+    query = """SELECT * FROM users WHERE email = ? """
+    cursor.execute(query, (email,))
+
+    return cursor.fetchone()[7]
+
+
 # Boot strap the table that holds artifacts for copyrightable material
 
 
@@ -216,6 +231,9 @@ def create_artifacts_table():
                 REFERENCES users (user_id)
         )"""
     )
+
+    cursor.close()
+    connection.close()
 
 
 def create_artifact(artifact):
@@ -240,3 +258,19 @@ def create_artifact(artifact):
     cursor.close()
     connection.close()
     print("Artifact added successfully.")
+
+
+# Get summaries for all copyrightable material artifacts
+def get_artifact_summaries():
+    connection = sqlite3.connect("trackmanagement.db")
+    cursor = connection.cursor()
+    query = """SELECT users.first_name || ' ' || users.surname as artist_name, artifact.title as title, artifact.type as type FROM artifacts inner join users on artifacts.artist_id = users.id"""
+    cursor.execute(
+        query,
+    )
+
+    results = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+    return results
