@@ -360,7 +360,7 @@ def get_file_info_from_artifact(artist_id, title, type):
 def update_artifact(artifact):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
-    query = """UPDATE artifact SET file_size_bytes = ?, file_extension = ?, checksum = ?, encrypted_data = ? WHERE artist_id = ? and title = ? and type = ?"""
+    query = """UPDATE artifacts SET file_size_bytes = ?, file_extension = ?, checksum = ?, encrypted_data = ? WHERE artist_id = ? and title = ? and type = ?"""
 
     cursor.execute(
         query,

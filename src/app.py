@@ -28,7 +28,6 @@ def prompt():
 
         if should_call_create_artifact:
             create_artifact(sess.user_id)
-            prompt()
 
         should_call_view_artists_artifacts = (
             input(
@@ -39,7 +38,6 @@ def prompt():
 
         if should_call_view_artists_artifacts:
             view_artists_artifacts(sess.user_id)
-            prompt()
 
         should_call_download_from_artifact = (
             input(
@@ -50,7 +48,6 @@ def prompt():
 
         if should_call_download_from_artifact:
             download_from_artifact(sess.user_id)
-            prompt()
 
         should_call_modify_artifact = (
             input(
@@ -61,7 +58,6 @@ def prompt():
 
         if should_call_modify_artifact:
             modify_artifact(sess.user_id)
-            prompt()
 
         should_call_delete_artifact = (
             input(
@@ -72,7 +68,6 @@ def prompt():
 
         if should_call_delete_artifact:
             delete_artifact(sess.user_id)
-            prompt()
     else:
         print(
             "Here are the summaries of all the copyrightable material artifacts managed in the system:"

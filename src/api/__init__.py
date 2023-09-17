@@ -121,10 +121,10 @@ def view_artists_artifacts(artist_id):
 
 # this method retrieves the encrypted copy of an existing artifact and saves it to an unencrypted local file
 def download_from_artifact(artist_id):
-    title = input("Which song would you like to download?")
-    copyrightable_material_type = input(
-        "What type of copyrightable material would you like to download for " + title
-    )
+    title = input("Which song would you like to download? ")
+    print("What type of copyrightable material would you like to download for " + title) 
+
+    copyrightable_material_type = input("AUDIO, LYRICS, or SCORE ").upper()
 
     artifact_id = get_artifact_id(artist_id, title, copyrightable_material_type)
 
@@ -145,10 +145,10 @@ def download_from_artifact(artist_id):
 
     create_artifact_audit_log(artist_id, artifact_id, "Downloaded", time)
 
-    file_name = file_info[0] + "_" + file_info[1] + "." + file_info[2]
+    file_name = file_info[0] + "_" + file_info[1] + file_info[2]
     file_data = decrypt(file_info[3])
 
-    local_checksum = generate_checksum_from_bytes(file_name)
+    local_checksum = generate_checksum_from_bytes(file_data)
     stored_checksum = get_checksum(artist_id, title, copyrightable_material_type)
 
     if local_checksum != stored_checksum:
@@ -163,10 +163,9 @@ def download_from_artifact(artist_id):
 
 # This method allows an artist to upload a new file/version of an existing material
 def modify_artifact(artist_id):
-    title = input("Which song would you like to download?")
-    copyrightable_material_type = input(
-        "What type of copyrightable material would you like to download for " + title
-    )
+    title = input("Which song would you like to upload a new version for? ")
+    print("What type of copyrightable material would you like to upload for " + title)
+    copyrightable_material_type = input("AUDIO, LYRICS, or SCORE ").upper()
 
     if not artifact_exists(artist_id, title, copyrightable_material_type):
         print(
@@ -178,7 +177,7 @@ def modify_artifact(artist_id):
         print("Please check your spelling and try again")
         return
 
-    file_path = input("Please input the filepath for your copyrightable material")
+    file_path = input("Please input the filepath for your copyrightable material ")
 
     try:
         copyrightable_material = CopyrightableMaterial(
