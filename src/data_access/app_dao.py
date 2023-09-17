@@ -382,6 +382,20 @@ def update_artifact(artifact):
     connection.close()
 
 
+# Delete an artifact
+def delete_artifact_row(artist_id, title, copyrightable_material_type):
+    connection = sqlite3.connect("trackmanagement.db")
+    cursor = connection.cursor()
+    query = """DELETE FROM artifacts WHERE artist_id = ? and title = ? and type = ?"""
+    cursor.execute(query, (artist_id, title, copyrightable_material_type))
+
+    # Commit the changes
+    connection.commit()
+    # Close the connection
+    cursor.close()
+    connection.close()
+
+
 # Create the artifact audit table
 
 

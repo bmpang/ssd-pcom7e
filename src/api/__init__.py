@@ -16,7 +16,7 @@ from util.otp_util import send_otp_to_email
 
 # This function will either logon or register a user and initialize the app to be aware of the user's role and identity
 def initiate_session(sess):
-    sess.user_email = input("Email:")
+    sess.user_email = input("Email: ")
     if is_email_registered(sess.user_email):
         log_on(sess)
     else:
@@ -122,7 +122,7 @@ def view_artists_artifacts(artist_id):
 # this method retrieves the encrypted copy of an existing artifact and saves it to an unencrypted local file
 def download_from_artifact(artist_id):
     title = input("Which song would you like to download? ")
-    print("What type of copyrightable material would you like to download for " + title) 
+    print("What type of copyrightable material would you like to download for " + title)
 
     copyrightable_material_type = input("AUDIO, LYRICS, or SCORE ").upper()
 
@@ -201,9 +201,23 @@ def modify_artifact(artist_id):
 # This function allows an Artist to delete their artifact or the ADMIN to delete any artifact
 
 
-def delete_artifact():
-    # TODO
-    return
+def delete_artifact(artist_id):
+    title = input("Which song would you like to remove an artifact for? ")
+    print("What type of copyrightable material would you like to delete for " + title)
+    copyrightable_material_type = input("AUDIO, LYRICS, or SCORE ").upper()
+
+    if not artifact_exists(artist_id, title, copyrightable_material_type):
+        print(
+            "We could not find a "
+            + copyrightable_material_type
+            + " artifact for "
+            + title
+        )
+        print("Please check your spelling and try again")
+        return
+
+    delete_artifact_row(artist_id, title, copyrightable_material_type)
+    print("Successfully deleted row")
 
 
 # This function unlocks a user account which was locked after 3 incorrect provided password
