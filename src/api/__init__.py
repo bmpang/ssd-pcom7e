@@ -1,9 +1,9 @@
 import os
 from datetime import datetime
 from getpass import getpass
-import pwinput
 from sqlite3 import IntegrityError
 
+import pwinput
 from data_access.app_dao import *
 from model.artifact import Artifact
 from model.copyrightable_material import (
@@ -36,9 +36,11 @@ def log_on(sess):
         salt = get_salt(sess.user_email)
         attempt = 1
         while attempt < 4:
-            
-            #salted_and_hashed_password = hash_data(input("Enter password: "), salt)
-            salted_and_hashed_password = hash_data(pwinput.pwinput(prompt='Password: ', mask='*'), salt)
+
+            # salted_and_hashed_password = hash_data(input("Enter password: "), salt)
+            salted_and_hashed_password = hash_data(
+                pwinput.pwinput(prompt="Password: ", mask="*"), salt
+            )
 
             if user_auth(sess.user_email, salted_and_hashed_password):
                 print("User logged in successfully")
@@ -107,7 +109,9 @@ def create_artifact(artist_id):
         create_artifact_row(artifact)
         time = datetime.now()
     except IntegrityError:
-        print("That file is already being managed as copyrightable material. Please check your path and try again.")
+        print(
+            "That file is already being managed as copyrightable material. Please check your path and try again."
+        )
         return
 
     artifact_id = get_artifact_id(artist_id, title, copyrightable_material_type)
@@ -202,7 +206,9 @@ def modify_artifact(artist_id):
         update_artifact(artifact)
         time = datetime.now()
     except IntegrityError:
-        print("That file is already being managed as copyrightable material. Please check your path and try again.")
+        print(
+            "That file is already being managed as copyrightable material. Please check your path and try again."
+        )
         return
 
     artifact_id = get_artifact_id(artist_id, title, copyrightable_material_type)

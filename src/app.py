@@ -76,9 +76,9 @@ def prompt():
         print("All locked users:")
         view_all_locked_users()
         unlock_user_id = input(
-            "Enter the ID of the user you wish to unlock or '0' to cancel:"
+            "Enter the ID of the user you wish to unlock or '0' to cancel: "
         )
-        if unlock_user_id > 0:
+        if unlock_user_id != "0":
             unlock_user(unlock_user_id)
 
 
