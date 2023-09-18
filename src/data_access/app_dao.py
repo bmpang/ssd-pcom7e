@@ -194,19 +194,22 @@ def lock_user(email):
 
 # This function is used by Administrators to unlock a user account
 def unlock_user_ID(user_id):
-    connection = sqlite3.connect("trackmanagement.db")
-    cursor = connection.cursor()
-    query = """UPDATE users SET acct_status ='active' WHERE user_id = ?"""
-    cursor.execute(query, (user_id,))
+    if view_all_locked_users() == None:
+        print("There are no locked users to unlock!")
+    else:
+        connection = sqlite3.connect("trackmanagement.db")
+        cursor = connection.cursor()
+        query = """UPDATE users SET acct_status ='active' WHERE user_id = ?"""
+        cursor.execute(query, (user_id,))
 
-    # Commit the changes
-    connection.commit()
+        # Commit the changes
+        connection.commit()
 
-    # Close the connection
-    cursor.close()
-    connection.close()
+        # Close the connection
+        cursor.close()
+        connection.close()
 
-    print(f"The user {get_user(user_id)[0]} has been unlocked")
+        print(f"The user {get_user(user_id)[0]} has been unlocked")
 
 
 # Display all locked user accounts to the system Admin
