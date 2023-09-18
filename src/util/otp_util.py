@@ -1,4 +1,5 @@
 from secrets import randbelow
+
 # from smtplib import SMTP
 
 
@@ -16,9 +17,10 @@ def generate_otp():
 def send_email(email, subject, message):
     print(message)
 
-
     # It requires usage of an api key for a valid gmail account, so we have commented out
     # the email functionality and stub it by directly printing the message body
+
+
 #   # Create a SMTP connection.
 #   connection = SMTP('smtp.gmail.com', 587)
 #   connection.ehlo()
