@@ -3,6 +3,7 @@ class Session:
     role = None
     user_id = None
     user_email = None
+    user_name = None
 
     def __init__(self):
         pass

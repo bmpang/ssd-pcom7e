@@ -141,6 +141,20 @@ def get_role(user_email):
 
     return role
 
+def get_user_name(user_email):
+    connection = sqlite3.connect("trackmanagement.db")
+    cursor = connection.cursor()
+    query = """SELECT first_name FROM users WHERE email = ?"""
+    cursor.execute(query, (user_email,))
+
+    user_name = cursor.fetchone()[0]
+
+    # Close the connection
+    cursor.close()
+    connection.close()
+
+    return user_name
+
 
 # This function verifies if a user account is locked
 def is_locked(email):

@@ -48,8 +48,10 @@ def log_on(sess):
             # If the salted and hashed passcode matches the stored value, a user will be logged on and the session is finalized
             if user_auth(sess.user_email, salted_and_hashed_password):
                 print("User logged in successfully")
+                input("Press any key to continue...")
                 sess.user_id = get_user_id(sess.user_email)
                 sess.role = get_role(sess.user_email)
+                sess.user_name = get_user_name(sess.user_email)
                 break
             else:
                 print("Password incorrect - please try again!")
