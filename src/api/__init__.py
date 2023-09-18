@@ -290,4 +290,4 @@ def register(sess):
         acct_status,
         salt,
     )
-    log_on()
+    log_on(sess)
