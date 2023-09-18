@@ -28,6 +28,7 @@ def prompt():
 
         if should_call_create_artifact:
             create_artifact(sess.user_id)
+            return
 
         should_call_view_artists_artifacts = (
             input(
@@ -38,6 +39,7 @@ def prompt():
 
         if should_call_view_artists_artifacts:
             view_artists_artifacts(sess.user_id)
+            return
 
         should_call_download_from_artifact = (
             input(
@@ -48,6 +50,7 @@ def prompt():
 
         if should_call_download_from_artifact:
             download_from_artifact(sess.user_id)
+            return
 
         should_call_modify_artifact = (
             input(
@@ -58,6 +61,7 @@ def prompt():
 
         if should_call_modify_artifact:
             modify_artifact(sess.user_id)
+            return
 
         should_call_delete_artifact = (
             input(
@@ -68,18 +72,39 @@ def prompt():
 
         if should_call_delete_artifact:
             delete_artifact(sess.user_id)
+            return
     else:
-        print(
-            "Here are the summaries of all the copyrightable material artifacts managed in the system:"
+        should_call_view_all_artifacts = (
+            input(
+                "Would you like to view all artifacts managed in the system - Y/N? "
+            ).upper()
+            == "Y"
         )
-        view_all_artifacts()
-        print("All locked users:")
-        view_all_locked_users()
-        unlock_user_id = input(
-            "Enter the ID of the user you wish to unlock or '0' to cancel: "
+
+        if should_call_view_all_artifacts:
+            view_all_artifacts()
+            return
+
+        should_call_view_all_locked_users = (
+            input("Would you like to view all locked user accounts - Y/N? ").upper()
+            == "Y"
         )
-        if unlock_user_id != "0":
+
+        if should_call_view_all_locked_users:
+            view_all_locked_users()
+            return
+
+        should_call_unlock_user_id = (
+            input("Would you like to unlock a user - Y/N? ").upper() == "Y"
+        )
+
+        if should_call_unlock_user_id:
+            unlock_user_id = input(
+                "Enter the ID of the user you wish to unlock or '0' to cancel: "
+            )
+
             unlock_user(unlock_user_id)
+            return
 
 
 if __name__ == "__main__":
@@ -89,4 +114,5 @@ if __name__ == "__main__":
     initiate_session(sess)
 
     if sess.user_id:
-        prompt()
+        while True:
+            prompt()
