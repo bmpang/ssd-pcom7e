@@ -275,26 +275,17 @@ def register(sess):
     first_name = input("Enter first name: ")
     surname = input("Enter last name: ")
     acct_status = "active"
-    role = ""
-    while role != "ARTIST" and role != "ADMIN":
-        role = input("Enter ARTIST or ADMIN: ")
-        if role != "ARTIST" and role != "ADMIN":
-            print("You must choose ARTIST or ADMIN")
 
-    sess.role = role
+    sess.role = "ARTIST"
 
-    if role == "ARTIST":
-        print("Welcome new Artist")
-        addUser(
-            first_name,
-            surname,
-            sess.user_email,
-            salted_and_hashed_password,
-            role,
-            acct_status,
-            salt,
-        )
-        sess.user_id = get_user_id(sess.user_email)
-
-    if role == "ADMIN":
-        print("Your Admin request will be sent to the Administor for approval")
+    print("Welcome new Artist")
+    addUser(
+        first_name,
+        surname,
+        sess.user_email,
+        salted_and_hashed_password,
+        "ARTIST",
+        acct_status,
+        salt,
+    )
+    log_on()
