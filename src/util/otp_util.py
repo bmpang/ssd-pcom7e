@@ -1,7 +1,8 @@
 from secrets import randbelow
-from smtplib import SMTP
+# from smtplib import SMTP
 
 
+# This function creates a 6 character string of digits, 0-10, to use as an otp
 def generate_otp():
     otp = str(randbelow(10))
 
@@ -16,6 +17,8 @@ def send_email(email, subject, message):
     print(message)
 
 
+    # It requires usage of an api key for a valid gmail account, so we have commented out
+    # the email functionality and stub it by directly printing the message body
 #   # Create a SMTP connection.
 #   connection = SMTP('smtp.gmail.com', 587)
 #   connection.ehlo()
@@ -31,6 +34,7 @@ def send_email(email, subject, message):
 #   connection.close()
 
 
+# Create and return an otp to validate against user input. Send that otp to the user's email.
 def send_otp_to_email(email):
     otp = generate_otp()
 
