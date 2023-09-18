@@ -53,6 +53,7 @@ def log_on(sess):
             else:
                 print("Password incorrect - please try again!")
                 attempt = attempt + 1
+
                 # After three failed attempts, accounts are locked. The admin account cannot be locked.
                 if attempt == 4 and sess.user_email != "admin@trackmanagement.com":
                     lock_user(sess.user_email)
@@ -66,6 +67,7 @@ def log_on(sess):
 def view_all_artifacts():
     artifact_summaries = []
 
+    # Print a message instead of a blank line if there are no artifacts
     if get_artifact_summaries() == None:
         print("No Artifacts Found")
     else:
@@ -99,14 +101,17 @@ def create_artifact(artist_id):
         copyrightable_material = CopyrightableMaterial(
             artist_id, title, file_path, copyrightable_material_type.upper()
         )
+
     # If there is no file at the path inputted, there is nothing to upload
     except FileNotFoundError:
         print("No file was found at the path you have provided")
         return
+
     # Files that are too large are not allowed
     except FileSizeTooLargeException:
         print("The file you have pathed too is too large.")
         return
+
     # the artifact must be of type audio, lyrics, or score
     except InvalidCopyrightableMaterialTypeException:
         print("Please pick a material type of AUDIO, LYRICS, or SCORE")
@@ -211,13 +216,16 @@ def modify_artifact(artist_id):
         copyrightable_material = CopyrightableMaterial(
             artist_id, title, file_path, copyrightable_material_type.upper()
         )
+
     # If there is no file at the path inputted, there is nothing to upload
     except FileNotFoundError:
         print("No file was found at the path you have provided")
         return
+
     # Files that are too large are not allowed
     except FileSizeTooLargeException:
         print("The file you have pathed too is too large.")
+
     # the artifact must be of type audio, lyrics, or score
     except InvalidCopyrightableMaterialTypeException:
         print("Please pick a material type of AUDIO, LYRICS, or SCORE")
@@ -227,6 +235,7 @@ def modify_artifact(artist_id):
     try:
         update_artifact(artifact)
         time = datetime.now()
+
     # if there is a checksum collision, then the supplied file is already managed elsewhere in the database
     except IntegrityError:
         print(
@@ -235,6 +244,7 @@ def modify_artifact(artist_id):
         return
 
     artifact_id = get_artifact_id(artist_id, title, copyrightable_material_type)
+
     # create a time stamp record for the modification
     create_artifact_audit_log(artist_id, artifact_id, "Modified", time)
 
@@ -292,6 +302,7 @@ def register(sess):
 
     # Create a new random salt that will be used for uniquely obfuscating the user's password
     salt = create_salt()
+
     # Immediately salt and hash the password so that the credential is never stored in memory, for privacy and security
     salted_and_hashed_password = hash_data(
         pwinput.pwinput(prompt="Enter password: ", mask="*"), salt
@@ -314,5 +325,6 @@ def register(sess):
         acct_status,
         salt,
     )
+
     # Redirect the newly registered user to log on
     log_on(sess)

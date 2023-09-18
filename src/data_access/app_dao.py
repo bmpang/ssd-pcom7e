@@ -22,11 +22,14 @@ def admin_default():
             salt TEXT
         )"""
     )
+
+    # If the default admin user has already been created, exit early
     if is_email_registered("admin@trackmanagement.com"):
         cursor.close()
         connection.close()
         return
     else:
+        # Create a new record for the admin user
         query = """INSERT INTO users (first_name, surname, email, password, role, acct_status, salt) VALUES (?, ?, ?, ?, ?, ?, ?)"""
         cursor.execute(
             query,
@@ -40,31 +43,35 @@ def admin_default():
                 "QiZ2wX4v",
             ),
         )
+
         # Commit the changes
         connection.commit()
+
         # Close the connection
         cursor.close()
         connection.close()
         print("Defaut Admin added to the database")
 
 
-# Check if the email is already registered.
-
-
+# Check if an email is already registered.
 def is_email_registered(email):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
     query = """SELECT * FROM users WHERE email = ?"""
     cursor.execute(query, (email,))
+
     # Get the results.
     results = cursor.fetchall()
-    # Return True if the email is already registered, False otherwise.
+
+    # Close the connection
+    cursor.close()
+    connection.close()
+
+    # Return True if there are any records matching the email, False otherwise.
     return len(results) > 0
 
 
-# Enter a new user into the databse
-
-
+# Enter a new user into the databse based off inputted details
 def addUser(first_name, surname, email, password, role, acct_status, salt):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
@@ -72,24 +79,32 @@ def addUser(first_name, surname, email, password, role, acct_status, salt):
     cursor.execute(
         query, (first_name, surname, email, password, role, acct_status, salt)
     )
+
     # Commit the changes
     connection.commit()
+
     # Close the connection
     cursor.close()
     connection.close()
     print("User added successfully.")
 
 
-# create a function to check if the password provided an user match the password in the database?
-
-
+# create a function to check if the password provided an user match the password in the database
+# note that both the supplied password and the one in the db would have been salted and hashed at this point
+# and it would not be possible to decrypt the strings to plain text
 def user_auth(email, user_password):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
     query = """SELECT * FROM users WHERE email = ?"""
     cursor.execute(query, (email,))
+    stored_password = cursor.fetchone()[4]
+
+    # Close the connection
+    cursor.close()
+    connection.close()
+
     # Check if the password matches the one provided by the user
-    if cursor.fetchone()[4] == user_password:
+    if stored_password == user_password:
         return True
     else:
         return False
@@ -102,7 +117,13 @@ def get_salt(user_email):
     query = """SELECT * FROM users WHERE email = ?"""
     cursor.execute(query, (user_email,))
 
-    return cursor.fetchone()[7]
+    salt = cursor.fetchone()[7]
+
+    # Close the connection
+    cursor.close()
+    connection.close()
+
+    return salt
 
 
 # Get role
@@ -112,118 +133,123 @@ def get_role(user_email):
     query = """SELECT role FROM users WHERE email = ?"""
     cursor.execute(query, (user_email,))
 
-    return cursor.fetchone()[0]
+    role = cursor.fetchone()[0]
+
+    # Close the connection
+    cursor.close()
+    connection.close()
+
+    return role
 
 
 # This function verifies if a user account is locked
-
-
 def is_locked(email):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
     query = """SELECT * FROM users WHERE email = ?"""
     cursor.execute(query, (email,))
+    status = cursor.fetchone()[6]
+
+    # Close the connection
+    cursor.close()
+    connection.close()
+
     # Check if the acct_status of the user is locked
-    if cursor.fetchone()[6] == "locked":
+    if status.fetchone()[6] == "locked":
         return True
     else:
         return False
 
 
 # This function locks a user account after 3 unsuccessful login attempts
-
-
 def lock_user(email):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
     query = """UPDATE users SET acct_status ='locked' WHERE email = ?"""
     cursor.execute(query, (email,))
+
     # Commit the changes
     connection.commit()
+
     # Close the connection
     cursor.close()
     connection.close()
+
     return
 
 
 # This function is used by Administrators to unlock a user account
-
-
 def unlock_user_ID(user_id):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
     query = """UPDATE users SET acct_status ='active' WHERE user_id = ?"""
     cursor.execute(query, (user_id,))
+
     # Commit the changes
     connection.commit()
+
     # Close the connection
     cursor.close()
     connection.close()
 
     print(f"The user {get_user(user_id)[0]} has been unlocked")
 
-    return
-
-
-def user_type(email):
-    connection = sqlite3.connect("trackmanagement.db")
-    cursor = connection.cursor()
-    query = """SELECT * FROM users WHERE email = ?"""
-    cursor.execute(query, (email,))
-    # Check if the user logged is an ADMIN or an ARTIST
-    if cursor.fetchone()[5] == "ADMIN":
-        return "ADMIN"
-    else:
-        return "ARTIST"
-    return
-
 
 # Display all locked user accounts to the system Admin
-
-
 def view_all_locked_users():
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
     query = """SELECT * FROM users WHERE acct_status = 'locked'"""
     cursor.execute(query)
+
     # Get the results.
     results = cursor.fetchall()
     print(results)
-    return
+
+    # Close the connection
+    cursor.close()
+    connection.close()
 
 
 # Return the user details in a list[]
-
-
 def get_user(user_id):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
     query = """SELECT * FROM users WHERE user_id = ? """
     cursor.execute(query, (user_id,))
+
     # Get the results.
     results = cursor.fetchall()
+
+    # Close the connection
+    cursor.close()
+    connection.close()
+
     return results
 
 
 # Fetch a user's id given their email
-
-
 def get_user_id(email):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
     query = """SELECT * FROM users WHERE email = ? """
     cursor.execute(query, (email,))
 
-    return cursor.fetchone()[7]
+    id = cursor.fetchone()[0]
+
+    # Close the connection
+    cursor.close()
+    connection.close()
+
+    return id
 
 
 # Boot strap the table that holds artifacts for copyrightable material
-
-
 def create_artifacts_table():
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
 
+    # Create the table
     cursor.execute(
         """CREATE TABLE IF NOT EXISTS artifacts (
             artifact_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -240,10 +266,12 @@ def create_artifacts_table():
         )"""
     )
 
+    # Close connections
     cursor.close()
     connection.close()
 
 
+# Get an id for an artifact given an artist, title, and material type
 def get_artifact_id(artist_id, title, type):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
@@ -257,12 +285,14 @@ def get_artifact_id(artist_id, title, type):
     cursor.close()
     connection.close()
 
+    # If there were no hits, there is no material matching the given specifications
     if result:
         return result[0]
     else:
         return None
 
 
+# Retrieve the checksum for the file ingested for an artifact
 def get_checksum(artist_id, title, type):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
@@ -276,16 +306,20 @@ def get_checksum(artist_id, title, type):
     cursor.close()
     connection.close()
 
+    # If there is no matching record given the specifications, there is no checksum to return
     if result:
         return result[0]
     else:
         return None
 
 
+# Check whether an artifact exists or not
 def artifact_exists(artist_id, title, type):
+    # If there is no id returned, no record exists
     return get_artifact_id(artist_id, title, type) is not None
 
 
+# Create a record for a new artifact
 def create_artifact_row(artifact):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
@@ -302,8 +336,10 @@ def create_artifact_row(artifact):
             artifact.encrypted_data,
         ),
     )
+
     # Commit the changes
     connection.commit()
+
     # Close the connection
     cursor.close()
     connection.close()
@@ -319,16 +355,19 @@ def get_artifact_summaries():
     )
 
     results = cursor.fetchall()
-    if len(results) == 0:
-        return
+
+    # Close the connection
     cursor.close()
     connection.close()
+
+    # If there are no results, return None instead of an empty list
+    if len(results) == 0:
+        return None
+
     return results
 
 
 # Get summaries for all of one artist's copyrightable material artifacts
-
-
 def get_artists_artifact_summaries(artist_id):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
@@ -337,8 +376,10 @@ def get_artists_artifact_summaries(artist_id):
 
     results = cursor.fetchall()
 
+    # Close the connection
     cursor.close()
     connection.close()
+
     return results
 
 
@@ -351,8 +392,10 @@ def get_file_info_from_artifact(artist_id, title, type):
 
     file_info = cursor.fetchone()
 
+    # Close the connection
     cursor.close()
     connection.close()
+
     return file_info
 
 
@@ -376,6 +419,7 @@ def update_artifact(artifact):
 
     # Commit the changes
     connection.commit()
+
     # Close the connection
     cursor.close()
     connection.close()
@@ -396,8 +440,6 @@ def delete_artifact_row(artist_id, title, copyrightable_material_type):
 
 
 # Create the artifact audit table
-
-
 def create_artifacts_audit_table():
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
@@ -418,18 +460,22 @@ def create_artifacts_audit_table():
         )"""
     )
 
+    # Close the connection
     cursor.close()
     connection.close()
 
 
+# Create a new time stamp record for an action taken against an artifact
 def create_artifact_audit_log(artist_id, artifact_id, action, time):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
+
     query = """INSERT INTO artifact_audit (artist_id, artifact_id, action, time) VALUES (?, ?, ?, ?)"""
     cursor.execute(
         query,
         (artist_id, artifact_id, action, time),
     )
+
     # Commit the changes
     connection.commit()
     # Close the connection
