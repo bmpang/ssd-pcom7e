@@ -155,7 +155,7 @@ def is_locked(email):
     connection.close()
 
     # Check if the acct_status of the user is locked
-    if status.fetchone()[6] == "locked":
+    if status == "locked":
         return True
     else:
         return False

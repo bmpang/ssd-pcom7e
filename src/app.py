@@ -121,5 +121,5 @@ if __name__ == "__main__":
     initiate_session(sess)
 
     # Once the user's identity is known, loop the main menu for them to take actions
-    while True:
+    while sess.user_id:
         prompt()

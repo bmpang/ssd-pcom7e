@@ -3,6 +3,7 @@ from getpass import getpass
 from sqlite3 import IntegrityError
 
 import pwinput
+
 from data_access.app_dao import *
 from model.artifact import Artifact
 from model.copyrightable_material import (
