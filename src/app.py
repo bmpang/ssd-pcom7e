@@ -22,26 +22,26 @@ def bootstrap_database():
 def artist_menu():
     os.system('cls')
     print(f"Wecolme {sess.user_name} to the Track Management System:\n\n")
-    print("|-------------------------------------------------------------------|")
+    print("|--------------------------------------------------------------------------------|")
     print("[1] - Add a new copyrightable material artifact?")
     print("[2] - Display your currently managed copyrightable material?")
     print("[3] - Download copyrightable material from a currently managed artifact?")
     print("[4] - Upload a new version of a currently managed copyrightable material")
     print("[5] - Delete a currently managed copyrightable material")
     print("[0] - Logout and exit the program")
-    print("|-------------------------------------------------------------------|")
+    print("|--------------------------------------------------------------------------------|")
     choice = input("Enter your choise: ")
     return choice
  
 def admin_menu():
     os.system('cls')
     print(f"Wecolme {sess.user_name} to the Track Management System:\n\n")
-    print("|-------------------------------------------------------------------|")
+    print("|--------------------------------------------------------------------------------|")
     print("[1] - Display all artifacts managed in the system")
     print("[2] - View all locked user accounts")
     print("[3] - Unlock a user")
     print("[0] Logout and exit the program")
-    print("|-------------------------------------------------------------------|")
+    print("|--------------------------------------------------------------------------------|")
     choice = input("Enter your choise: ")
     return choice
 

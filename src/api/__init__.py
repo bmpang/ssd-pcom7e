@@ -14,6 +14,7 @@ from model.copyrightable_material import (
 from util.checksum_util import generate_checksum_from_bytes
 from util.encryption_util import create_salt, decrypt, hash_data
 from util.otp_util import send_otp_to_email
+from util.pw_validator import validatePassword
 
 
 # This function creates a session object and determines the user's identity and role which will inform the app what options to present to the user
@@ -306,9 +307,14 @@ def register(sess):
     # Create a new random salt that will be used for uniquely obfuscating the user's password
     salt = create_salt()
 
+    user_pw = pwinput.pwinput(prompt="Enter password: ", mask="*")
+    while validatePassword(user_pw) == False:
+        print("Invalid password: your password needs to have at least 8 characters, one being uppercase, one being a digit and one being a special character")
+        user_pw = pwinput.pwinput(prompt="Enter password: ", mask="*")
+        
     # Immediately salt and hash the password so that the credential is never stored in memory, for privacy and security
     salted_and_hashed_password = hash_data(
-        pwinput.pwinput(prompt="Enter password: ", mask="*"), salt
+        user_pw, salt
     )
 
     first_name = input("Enter first name: ")
