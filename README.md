@@ -1,19 +1,10 @@
-# Creating Python programs in Codio
+# Track Management
 
-### Make a new file
-Use **File > New File...** or right-click in the file tree to create a new file. You can right-click in the file tree to rename or delete files.
+## About
+This repository hosts the python code necessary to run our track management application. The app allows for artists to create and manage artifacts of copyrightable material related to their songs. Whether it is lyrics, audio, or a score, they can upload their work where it will be stored encrypted-at-rest while checksums verify data integrity and prevent reuse of others' work.
 
-As Codio detects which file is in focus, simply put your cursor into whichever code editor you want to run.
+### External Libraries / Dependencies
+We are using sqlite3 to mangage database interactions from within python, pyca/cryptography for AES-128 symmetric key encryption, and pwinput for user-friendly masked password inputs
 
-### Run your code
-Use the Run button (that looks like a Rocketship) to Run the file your cursor is in.
-
-### Debug your code
-Use the "Debug Current File" on the far right of the top menu bar to launch the debugger targeting the file your cursor is in.
-
-### Reconfigure your Panels for easier development
-Use the **View > Panels** menu on the top tool bar to segment your screen.
-
-Simply drag the tab of the file or terminal (the part with the name) you want to move into the new panel.
-
-
+### Run the application
+Use Python3 to run src/app.py to run the application
