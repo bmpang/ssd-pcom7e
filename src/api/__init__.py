@@ -309,13 +309,13 @@ def register(sess):
 
     user_pw = pwinput.pwinput(prompt="Enter password: ", mask="*")
     while validatePassword(user_pw) == False:
-        print("Invalid password: your password needs to have at least 8 characters, one being uppercase, one being a digit and one being a special character")
+        print(
+            "Invalid password: your password needs to have at least 8 characters, one being uppercase, one being a digit and one being a special character"
+        )
         user_pw = pwinput.pwinput(prompt="Enter password: ", mask="*")
-        
+
     # Immediately salt and hash the password so that the credential is never stored in memory, for privacy and security
-    salted_and_hashed_password = hash_data(
-        user_pw, salt
-    )
+    salted_and_hashed_password = hash_data(user_pw, salt)
 
     first_name = input("Enter first name: ")
     surname = input("Enter last name: ")

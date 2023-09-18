@@ -1,5 +1,6 @@
-from api import *
 import os
+
+from api import *
 from data_access.app_dao import (
     admin_default,
     create_artifacts_audit_table,
@@ -19,31 +20,42 @@ def bootstrap_database():
     # creates the artifact audit table for logging timestamps
     create_artifacts_audit_table()
 
+
 def artist_menu():
-    os.system('cls')
+    os.system("cls")
     print(f"Wecolme {sess.user_name} to the Track Management System:\n\n")
-    print("|--------------------------------------------------------------------------------|")
+    print(
+        "|--------------------------------------------------------------------------------|"
+    )
     print("[1] - Add a new copyrightable material artifact")
     print("[2] - Display your currently managed copyrightable material")
     print("[3] - Download copyrightable material from a currently managed artifact")
     print("[4] - Upload a new version of a currently managed copyrightable material")
     print("[5] - Delete a currently managed copyrightable material")
     print("[0] - Logout and exit the program")
-    print("|--------------------------------------------------------------------------------|")
+    print(
+        "|--------------------------------------------------------------------------------|"
+    )
     choice = input("Enter your choise: ")
     return choice
- 
+
+
 def admin_menu():
-    os.system('cls')
+    os.system("cls")
     print(f"Wecolme {sess.user_name} to the Track Management System:\n\n")
-    print("|--------------------------------------------------------------------------------|")
+    print(
+        "|--------------------------------------------------------------------------------|"
+    )
     print("[1] - Display all artifacts managed in the system")
     print("[2] - View all locked user accounts")
     print("[3] - Unlock a user")
     print("[0] - Logout and exit the program")
-    print("|--------------------------------------------------------------------------------|")
+    print(
+        "|--------------------------------------------------------------------------------|"
+    )
     choice = input("Enter your choise: ")
     return choice
+
 
 # This function is used as a main menu that prompts users for what actions they wish to take
 def prompt():
@@ -54,7 +66,7 @@ def prompt():
         if choice == "1":
             create_artifact(sess.user_id)
             input("Press any key to continue...")
-         # Check if a user wants to view their existing artifacts or not
+        # Check if a user wants to view their existing artifacts or not
         elif choice == "2":
             view_artists_artifacts(sess.user_id)
             input("Press any key to continue...")
@@ -71,8 +83,8 @@ def prompt():
             delete_artifact(sess.user_id)
         elif choice == "0":
             sess.user_id = None
-            return      
-    elif sess.role == 'ADMIN':
+            return
+    elif sess.role == "ADMIN":
         choice = admin_menu()
         # Check if an admin would like to list all artifacts in the system
         if choice == "1":
@@ -90,7 +102,7 @@ def prompt():
         # Check if a user would like to modify an existing artifact
         elif choice == "0":
             sess.user_id = None
-            return      
+            return
 
 
 # This is the method actually called when the app is ran.

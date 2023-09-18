@@ -1,5 +1,6 @@
 from password_validator import PasswordValidator
 
+
 def validatePassword(password):
     meets_criteria = bool
     pw = PasswordValidator()

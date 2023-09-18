@@ -141,6 +141,7 @@ def get_role(user_email):
 
     return role
 
+
 def get_user_name(user_email):
     connection = sqlite3.connect("trackmanagement.db")
     cursor = connection.cursor()
