@@ -271,7 +271,9 @@ def register(sess):
 
     salt = create_salt()
     # Immediately salt and hash the password so that the credential is never stored in memory, for privacy and security
-    salted_and_hashed_password = hash_data(getpass("Enter password: "), salt)
+    salted_and_hashed_password = hash_data(
+        pwinput.pwinput(prompt="Enter password: ", mask="*"), salt
+    )
     first_name = input("Enter first name: ")
     surname = input("Enter last name: ")
     acct_status = "active"
